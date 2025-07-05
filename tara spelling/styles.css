@@ -1,0 +1,538 @@
+/* Base styles and variables */
+:root {
+    --primary-color: #ff6b81;
+    --secondary-color: #70a1ff;
+    --accent-color: #7bed9f;
+    --correct-color: #2ed573;
+    --wrong-color: #ff4757;
+    --text-color: #2f3542;
+    --light-color: #ecf0f1;
+    --background-color: #f7f1e3;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Neue', cursive;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.app-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header styles */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    gap: 15px;
+}
+
+.tara-logo {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tara-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Main game container */
+main {
+    flex: 1;
+}
+
+.game-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Progress bar */
+.progress-bar {
+    height: 15px;
+    background-color: var(--light-color);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--accent-color);
+    width: 10%; /* Will be updated by JS */
+    transition: width 0.5s ease;
+}
+
+/* Score display */
+.score-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stars {
+    color: gold;
+    letter-spacing: 5px;
+}
+
+/* Word container */
+.word-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.image-container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--light-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover {
+    transform: scale(1.05);
+}
+
+.image-container img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Letter blanks */
+.letter-blanks {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.letter-blank {
+    width: 60px;
+    height: 60px;
+    border: 3px dashed var(--secondary-color);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: bold;
+    background-color: var(--light-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.letter-blank.filled {
+    border-style: solid;
+    animation: pulse 0.5s ease;
+}
+
+.letter-blank.correct {
+    border-color: var(--correct-color);
+    background-color: rgba(46, 213, 115, 0.2);
+    animation: correct-letter 0.5s ease;
+}
+
+.letter-blank.wrong {
+    border-color: var(--wrong-color);
+    background-color: rgba(255, 71, 87, 0.2);
+    animation: wrong-letter 0.5s ease;
+}
+
+/* Letter options */
+.letter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.letter-option {
+    width: 50px;
+    height: 50px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+
+.letter-option:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+}
+
+.letter-option:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+}
+
+.letter-option.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Additional animation for wrong letter */
+.letter-option.wrong {
+    animation: shake 0.4s ease;
+    background-color: var(--wrong-color);
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    50% { transform: translateX(8px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Feedback container */
+.feedback-container {
+    text-align: center;
+    margin-top: 10px;
+    display: none;
+}
+
+.feedback-message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.feedback-message.correct {
+    color: var(--correct-color);
+}
+
+.feedback-message.wrong {
+    color: var(--wrong-color);
+}
+
+.next-button {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.next-button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* Difficulty selector */
+.difficulty-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.difficulty-button {
+    background-color: var(--light-color);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.difficulty-button:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.difficulty-button.active {
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+}
+
+.copyright {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-top: 10px;
+}
+
+/* Success Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: var(--shadow);
+}
+
+.modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.celebration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.celebration img {
+    margin-bottom: 15px;
+}
+
+#play-again-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 15px;
+}
+
+#play-again-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Star Celebration */
+.star-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.big-star {
+    font-size: 150px;
+    animation: star-animation 1.5s ease-in-out;
+    opacity: 0;
+}
+
+@keyframes star-animation {
+    0% {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* tara-celebration */
+.tara-celebration {
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: bounce 1s infinite alternate;
+}
+
+.tara-celebration img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes celebrate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.celebrate {
+    animation: celebrate 0.5s ease;
+}
+
+@keyframes correct-letter {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); background-color: rgba(46, 213, 115, 0.5); }
+    100% { transform: scale(1); background-color: rgba(46, 213, 115, 0.2); }
+}
+
+@keyframes wrong-letter {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .image-container {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .letter-blank {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+    
+    .letter-option {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .image-container {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .letter-blank {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+    
+    .letter-option {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+    
+    .difficulty-button {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+      .tara-celebration {
+        width: 150px;
+        height: 150px;
+    }
+}

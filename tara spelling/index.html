@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tara ABC - Learn Spelling with Pictures</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-container">                <div class="tara-logo">
+                    <img src="tara_logo.png" alt="Tara with ABC sign">
+                </div>
+                <h1>Tara ABC</h1>
+            </div>
+            <p class="subtitle">Learn Spelling with Tara!</p>
+        </header>        <main>
+            <div class="game-container">
+                <div class="word-container">
+                    <div class="image-container">
+                        <img id="word-image" src="" alt="Guess this word">
+                    </div>
+                    
+                    <div class="letter-blanks" id="letter-blanks">
+                        <!-- Letter blanks will be added dynamically -->
+                    </div>
+                </div>
+
+                <div class="letter-options" id="letter-options">
+                    <!-- Letter options will be added dynamically -->
+                </div>                <div class="star-celebration" id="star-celebration">
+                    <div class="big-star">⭐</div>
+                </div>                  <div class="feedback-container" id="feedback-container">
+                    <div class="feedback-message" id="feedback-message"></div>
+                    <button class="next-button" id="next-button">→</button>
+                </div>
+            </div>
+        </main>        <footer>
+            <p class="copyright">© 2025 Tara ABC | Made with ❤️ for little learners</p>
+        </footer>
+    </div>    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <h2>Amazing Job!</h2>
+            <div class="celebration">
+                <p>You've completed all the words!</p>                <div class="tara-celebration">
+                    <img src="./images/tara celebration.png" alt="Tara celebrating">
+                </div>
+            </div>
+            <button id="play-again-button">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
