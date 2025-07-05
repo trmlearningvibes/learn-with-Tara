@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrust Academy Super Spellers !</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>    <div class="app-container">
+        <header>            <div class="logo-container">
+                <div class="intrust-logo">
+                    <img src="intrust_logo.png" alt="Intrust Academy logo">
+                </div>
+                <h1>Intrust Academy Super Spellers !</h1>
+            </div>
+        </header>
+
+        <main>            <div class="mode-selection" id="mode-selection">
+                <h2>Choose Your Game Mode</h2>
+                <div class="selection-status" id="selection-status">
+                    <div class="status-item">
+                        <span class="status-label">Input Method:</span>
+                        <span class="status-value" id="input-status">Not Selected</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Difficulty:</span>
+                        <span class="status-value" id="difficulty-status">Not Selected</span>
+                    </div>
+                </div>
+                <div class="mode-buttons">
+                    <button class="mode-button" id="touch-mode-btn">
+                        <span class="mode-icon">👆</span>
+                        <span class="mode-title">Touch</span>
+                        <span class="mode-description">Select letters from options</span>
+                    </button>
+                    <button class="mode-button" id="keyboard-mode-btn">
+                        <span class="mode-icon">⌨️</span>
+                        <span class="mode-title">Keyboard</span>
+                        <span class="mode-description">Type letters with keyboard</span>
+                    </button>
+                    <button class="mode-button" id="easy-mode-btn">
+                        <span class="mode-icon">😊</span>
+                        <span class="mode-title">Easy</span>
+                        <span class="mode-description">3-letter words</span>
+                    </button>
+                    <button class="mode-button" id="difficult-mode-btn">
+                        <span class="mode-icon">🧠</span>
+                        <span class="mode-title">Difficult</span>
+                        <span class="mode-description">4-5 letter words</span>
+                    </button>
+                </div>
+                <div class="start-game-container" id="start-game-container" style="display: none;">
+                    <button class="start-game-button" id="start-game-btn">Start Game</button>
+                </div>
+            </div>
+
+            <div class="game-container" id="game-container" style="display: none;">
+                <div class="mode-indicator" id="mode-indicator"></div>
+                  <div class="word-container">
+                    <div class="image-container">
+                        <img id="word-image" alt="Word to spell" />
+                    </div>
+                      <div class="letter-blanks" id="letter-blanks">
+                        <!-- Letter blanks will be added dynamically -->
+                    </div>
+                    
+                    <div class="hint-container">
+                        <button class="hint-button" id="hint-button">💡 Hint</button>
+                    </div>
+                </div>                <div class="letter-options" id="letter-options">
+                    <!-- Letter options will be added dynamically -->
+                </div>
+
+                <div class="star-celebration" id="star-celebration">
+                    <div class="big-star">⭐</div>
+                </div>
+
+                <div class="feedback-container" id="feedback-container">
+                    <div class="feedback-message" id="feedback-message"></div>
+                </div>
+                
+                <button class="back-to-modes" id="back-to-modes">Choose Different Mode</button>
+            </div>
+        </main><footer>
+            <p class="copyright">© 2025 Intrust Academy Super Spellers ! | Made with ❤️ for little learners</p>
+        </footer>
+    </div>    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <button class="home-button" id="home-button" title="Go to Home">🏠</button>
+            <h2>Amazing Job!</h2>            <div class="celebration">
+                <p>You've completed all the words!</p>
+                <div class="intrust-celebration">
+                    <img src="intrust celebration.png" alt="Intrust Academy celebrating">
+                </div>
+            </div>
+            <button id="play-again-button">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
