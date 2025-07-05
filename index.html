@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning with Tara</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 50px;
+        }
+        
+        .header-logo {
+            width: 300px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            color: white;
+            font-size: 1.4rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: white;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 40px 0;
+        }
+        
+        .app-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .app-card:hover::before {
+            left: 100%;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        
+        .app-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .app-title {
+            font-size: 1rem;
+            color: #5a3e8a;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .app-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .play-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .play-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .play-button:active {
+            transform: scale(0.98);
+        }
+        
+        .play-button.coming-soon {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .play-button.coming-soon:hover {
+            transform: none;
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #5a3e8a;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .footer h3 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .footer p {
+            opacity: 0.9;
+            line-height: 1.2;
+            font-size: 0.8rem;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .app-card {
+                padding: 15px 10px;
+                min-height: 100px;
+            }
+            
+            .app-icon {
+                font-size: 2rem;
+            }
+            
+            .app-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="learning with Tara.png" alt="Learning with Tara" class="header-logo">
+            <h1>Learning with Tara</h1>
+            <p class="subtitle">Fun Learning Games for Young Children</p>
+            <p class="description">
+                A carefully curated collection of touch-friendly educational games designed to make learning fun and accessible for young children. 
+            </p>
+        </div>
+        
+        <div class="apps-grid">
+            <div class="app-card" onclick="openGame('intrust spelling/index.html')">
+                <div class="app-icon">📝</div>
+                <h2 class="app-title">School Super Spellers</h2>
+                <button class="play-button">Play Now</button>
+            </div>
+            
+            <div class="app-card" onclick="openGame('tara ABC/index.html')">
+                <div class="app-icon">🔤</div>
+                <h2 class="app-title">Spelling with Tara</h2>
+                <button class="play-button">Play Now</button>
+            </div>
+            
+            <div class="app-card" onclick="openGame('tara-matching-game/index.html')">
+                <div class="app-icon">🎯</div>
+                <h2 class="app-title">Tara's Matching Magic</h2>
+                <button class="play-button">Play Now</button>
+            </div>
+            
+            <div class="app-card" onclick="openGame('world animals/index.html')">
+                <div class="app-icon">🌍</div>
+                <h2 class="app-title">Tara's Animal World</h2>
+                <button class="play-button">Play Now</button>
+            </div>
+            
+            <div class="app-card" onclick="openGame('planets/index.html')">
+                <div class="app-icon">🪐</div>
+                <h2 class="app-title">Tara the Space Explorer</h2>
+                <button class="play-button">Play Now</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-content">
+                <h3>❤️ Made with Love for Little Learners</h3>
+                <p>
+                    Designed for little hands and curious minds, engaging but not over-stimulating, intended to be played WITH a parent or educator.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGame(gameUrl) {
+            window.location.href = gameUrl;
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.app-card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'slideInUp 0.6s ease-out forwards';
+            });
+        });
+
+        // Add slideInUp animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
