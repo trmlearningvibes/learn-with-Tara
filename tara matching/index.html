@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tara's Matching Games</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>    <div class="container">        <header>
+            <div class="logo-container">
+                <img src="tara logo.png" alt="Tara's Logo" class="tara-logo">
+            </div>
+            <h1>Tara's Matching Magic!</h1>
+        </header>
+
+        <nav class="game-selector">
+            <button class="game-btn active" data-game="opposites">⬆️⬇️ Opposites</button>
+            <button class="game-btn" data-game="letters">🔤 Letters</button>
+            <button class="game-btn" data-game="animal_homes">🏠 Animals</button>
+            <button class="game-btn" data-game="capital_small">🔠 Cases</button>
+            <button class="game-btn" data-game="number_fruits">🔢 Numbers</button>
+            <button class="game-btn" data-game="spelling">🔤 Spelling</button>
+        </nav>
+
+        <div class="game-area">            <!-- Opposites Game -->
+            <div id="opposites-game" class="game active">
+                <div class="matching-area">
+                    <div class="left-column">
+                        <div class="match-item" data-match="night">🌙</div>
+                        <div class="match-item" data-match="tall">🏢</div>
+                        <div class="match-item" data-match="hot">🔥</div>
+                        <div class="match-item" data-match="happy">😊</div>
+                        <div class="match-item" data-match="up">⬆️</div>
+                        <div class="match-item" data-match="in">📦</div>
+                    </div>
+                    <div class="right-column">
+                        <div class="match-target" data-target="day">☀️</div>
+                        <div class="match-target" data-target="short">🏠</div>
+                        <div class="match-target" data-target="cold">❄️</div>
+                        <div class="match-target" data-target="sad">😢</div>
+                        <div class="match-target" data-target="down">⬇️</div>
+                        <div class="match-target" data-target="out">🚪</div>
+                    </div>
+                </div>
+            </div>            <!-- Letters Game -->
+            <div id="letters-game" class="game">
+                <div class="matching-area">
+                    <div class="left-column">
+                        <div class="match-item" data-match="apple">🍎</div>
+                        <div class="match-item" data-match="ball">⚽</div>
+                        <div class="match-item" data-match="cat">🐱</div>
+                        <div class="match-item" data-match="dog">🐶</div>
+                        <div class="match-item" data-match="egg">🥚</div>
+                        <div class="match-item" data-match="flower">🌸</div>
+                    </div>
+                    <div class="right-column">
+                        <div class="match-target" data-target="a">A</div>
+                        <div class="match-target" data-target="b">B</div>
+                        <div class="match-target" data-target="c">C</div>
+                        <div class="match-target" data-target="d">D</div>
+                        <div class="match-target" data-target="e">E</div>
+                        <div class="match-target" data-target="f">F</div>
+                    </div>
+                </div>
+            </div>            <!-- Animals Game -->
+            <div id="animal_homes-game" class="game">
+                <div class="matching-area">
+                    <div class="left-column">
+                        <div class="match-item" data-match="fish">🐠</div>
+                        <div class="match-item" data-match="bird">🐦</div>
+                        <div class="match-item" data-match="rabbit">🐰</div>
+                        <div class="match-item" data-match="bee">🐝</div>
+                        <div class="match-item" data-match="spider">🕷️</div>
+                        <div class="match-item" data-match="monkey">🐵</div>
+                    </div>
+                    <div class="right-column">
+                        <div class="match-target" data-target="sea">🌊</div>
+                        <div class="match-target" data-target="nest">🪺</div>
+                        <div class="match-target" data-target="burrow">🕳️</div>
+                        <div class="match-target" data-target="hive">🍯</div>
+                        <div class="match-target" data-target="web">🕸️</div>
+                        <div class="match-target" data-target="tree">🌳</div>
+                    </div>
+                </div>
+            </div>            <!-- Capital & Small Letters Game -->
+            <div id="capital_small-game" class="game">
+                <div class="matching-area">
+                    <div class="left-column"></div>
+                    <div class="right-column"></div>
+                </div>
+            </div>            <!-- Number & Fruits Game -->
+            <div id="number_fruits-game" class="game">
+                <div class="matching-area">
+                    <div class="left-column"></div>
+                    <div class="right-column"></div>
+                </div>
+            </div>            <!-- Spelling Game -->
+            <div id="spelling-game" class="game">
+                <div class="matching-area">
+                    <div class="left-column">
+                        <div class="match-item" data-match="Cat">Cat</div>
+                        <div class="match-item" data-match="Dog">Dog</div>
+                        <div class="match-item" data-match="Star">Star</div>
+                        <div class="match-item" data-match="Sun">Sun</div>
+                        <div class="match-item" data-match="Bus">Bus</div>
+                        <div class="match-item" data-match="Cow">Cow</div>
+                        <div class="match-item" data-match="Egg">Egg</div>
+                        <div class="match-item" data-match="Ball">Ball</div>
+                        <div class="match-item" data-match="Lion">Lion</div>
+                    </div>
+                    <div class="right-column">
+                        <div class="match-target" data-target="cat">🐱</div>
+                        <div class="match-target" data-target="dog">🐶</div>
+                        <div class="match-target" data-target="star">⭐</div>
+                        <div class="match-target" data-target="sun">☀️</div>
+                        <div class="match-target" data-target="bus">🚌</div>
+                        <div class="match-target" data-target="cow">🐮</div>
+                        <div class="match-target" data-target="egg">🥚</div>
+                        <div class="match-target" data-target="ball">⚽</div>
+                        <div class="match-target" data-target="lion">🦁</div>
+                    </div>
+                </div>
+            </div>
+        </div>        <div class="celebration" id="celebration">
+            <div class="celebration-content">
+                <img id="celebration-image" src="tara opposites.png" alt="Tara Celebration" class="celebration-tara-image">
+                <h2>🎉 Great Job! 🎉</h2>
+                <p>You matched them all!</p>
+                <button id="next-game">Next Game ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
