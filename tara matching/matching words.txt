@@ -1,0 +1,58 @@
+Opposites:
+Night | Day
+Tall (giraffe) | Short (mouse)
+Hot | Cold
+Happy | Sad
+Up | Down
+fast (cheetah) | slow (tortoise)
+Sleeping | awake
+quiet (sshh) | loud (shout)
+
+
+Letters:
+A | Apple
+B | Ball
+C | cat
+D | dog
+E | egg
+F | flower
+G | grapes
+H | hat
+K | kite
+L | lion
+M | monkey
+N | needle
+O | owl
+P | penguin
+Q | queen
+R | rabbit
+S | swing
+T | tiger
+U | umbrella
+V | violin
+W | watermelon
+X | xylophone
+Y | yak
+Z | zebra
+
+
+Animal homes:
+fish | sea
+bird | nest
+rabbit | burrow
+bee | hive
+spider | web
+monkey | tree
+penguin | igloo
+child | house
+
+
+Word matches:
+cup
+cat
+hat 
+sun
+bat
+bus
+dog
+sad

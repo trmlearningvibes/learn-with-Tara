@@ -1,0 +1,2943 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: #e6e0f8; /* Softer pastel purple */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.game {
+    display: none;
+}
+
+.game.active {
+    display: block;
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.tara-logo {
+    max-width: 280px; /* Increased from 200px */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #5a3e8a;
+    font-size: 2.5rem;
+}
+
+.game-selector {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.game-btn {
+    padding: 10px 20px; /* Reduced padding */
+    font-size: 1.5rem; /* Reduced font size */
+    min-width: 100px; /* Reduced min-width */
+    border-radius: 20px;
+    border: 3px solid #7c4dff;
+    background: #fff;
+    color: #5a3e8a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-btn.active,
+.game-btn:hover {
+    background: #7c4dff;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+#spelling-game .left-column .match-item {
+    font-size: 2.2rem; /* Reduced from 3rem */
+}
+
+.game {
+    display: none; /* Hide all games by default */
+}
+
+.game.active {
+    display: block; /* Show the active game */
+}
+
+.matching-area {
+    display: flex;
+    justify-content: center;
+    /* gap: 80px !important; */ /* Reverting previous change */
+    margin-top: 20px;
+}
+
+/* Specific styling for ALL targets - for appearance, not overriding fixed size for all games */
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* NEW: Specific styling for target buttons in the Numbers game */
+#number_fruits-game .right-column .match-target {
+    height: auto;
+    min-height: 160px;
+    font-size: 2.5rem;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+/* NEW: Align items to the start for the Numbers game columns */
+#number_fruits-game .left-column,
+#number_fruits-game .right-column {
+    align-items: flex-start;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally in their column */
+    transition: all 0.3s ease;
+}
+
+.left-column {
+    margin-right: 160px; /* Increased from 80px */
+}
+
+.right-column {
+    margin-left: 160px; /* Increased from 80px */
+}
+
+.match-item, .match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    color: #333;
+    padding: 10px;
+    border-radius: 24px;
+    font-size: 4.5rem; /* Increased from 3.2rem */
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(124, 77, 255, 0.10);
+    width: 160px; /* Increased from 140px */
+    height: 160px; /* Increased from 140px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.match-target {
+    background: #fff;
+    border: 4px solid #7c4dff;
+    box-sizing: border-box;
+}
+
+/* Removed .fruit-display rule */
+/* Removed #number_fruits-game .right-column .match-target rule */
+/* Removed #number_fruits-game .left-column, #number_fruits-game .right-column align-items: flex-start rule */
+
+.match-item:hover, .match-item:active,
+.match-target:hover, .match-target:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.match-item.matched,
+.match-target.matched {
+    background: rgba(0, 184, 148, 0.3);
+    border-color: #00b894;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+    pointer-events: none;
+}
+
+/* Selection and match states */
+.match-item.selected, .match-target.selected {
+    border-color: #4ecdc4 !important;
+    background: rgba(78, 205, 196, 0.2) !important;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.match-item.correct-match, .match-target.correct-match {
+    border-color: #00b894 !important;
+    background: rgba(0, 184, 148, 0.3) !important;
+    transform: scale(1.1);
+    animation: bounce 0.6s ease-in-out;
+}
+
+.match-item.wrong-match, .match-target.wrong-match {
+    border-color: #ff6b6b !important;
+    background: rgba(255, 107, 107, 0.3) !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.celebration.show {
+    display: flex;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.celebration-content {
+    background: white;
+    padding: 80px; /* Increased from 60px */
+    border-radius: 40px; /* Increased from 30px */
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    min-width: 700px; /* Increased from 500px */
+}
+
+.celebration-tara-image {
+    max-height: 350px; /* Increased from 200px */
+    max-width: 400px; /* Increased from 250px */
+    height: auto;
+    width: auto;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    animation: bounce 0.6s ease-in-out;
+}
+
+.celebration-content h2 {
+    font-size: 5.5rem; /* Increased from 4rem */
+    color: #6a5acd;
+    margin-bottom: 25px;
+}
+
+.celebration-content p {
+    font-size: 2.5rem; /* Increased from 2rem */
+    color: #333;
+    margin-bottom: 40px;
+}
+
+#next-game {
+    background: linear-gradient(45deg, #00b894, #00a085);
+    border: none;
+    border-radius: 25px; /* Increased from 20px */
+    padding: 25px 50px; /* Increased from 20px 40px */
+    font-size: 2rem; /* Increased from 1.5rem */
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#next-game:hover, #next-game:active {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
