@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planet Explorer - Learn About Our Solar System!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="images/tara space.png?v=1735362000" alt="Planet Explorer Header" class="header-image">
+            <h1>🚀 Planet Explorer 🌟</h1>
+            <p>Choose your space adventure!</p>
+        </header>
+
+        <!-- Game Tabs -->
+        <div class="tabs-container">
+            <div class="tab active" data-tab="create-game">
+                <span class="tab-icon">🏗️</span>
+                <span class="tab-text">Create Solar System</span>
+            </div>
+            <div class="tab" data-tab="facts-game">
+                <span class="tab-icon">🧠</span>
+                <span class="tab-text">Planet Facts</span>
+            </div>
+        </div>
+
+        <!-- Facts Game Tab -->
+        <div id="facts-game" class="game-tab">
+            <div class="game-instructions">
+                <p>Drag the facts to the correct planets!</p>
+            </div>
+
+            <div class="game-area">
+                <!-- Solar System Line -->
+                <div class="solar-system">
+                    <div class="sun">
+                        <div class="sun-image">☀️</div>
+                        <h3>Sun</h3>
+                    </div>
+
+                    <div class="planet-card" data-planet="mercury">
+                        <img src="images/mercury.png?v=1735362000" alt="Mercury" class="planet-image-real">
+                        <h3>Mercury</h3>
+                        <div class="drop-zone" data-planet="mercury"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="venus">
+                        <img src="images/Venus.jpg?v=1735362000" alt="Venus" class="planet-image-real">
+                        <h3>Venus</h3>
+                        <div class="drop-zone" data-planet="venus"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="earth">
+                        <img src="images/earth.png?v=1735362000" alt="Earth" class="planet-image-real">
+                        <h3>Earth</h3>
+                        <div class="drop-zone" data-planet="earth"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="mars">
+                        <img src="images/mars.png?v=1735362000" alt="Mars" class="planet-image-real">
+                        <h3>Mars</h3>
+                        <div class="drop-zone" data-planet="mars"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="jupiter">
+                        <img src="images/jupiter.jpg?v=1735362000" alt="Jupiter" class="planet-image-real">
+                        <h3>Jupiter</h3>
+                        <div class="drop-zone" data-planet="jupiter"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="saturn">
+                        <img src="images/saturn.jpg?v=1735362000" alt="Saturn" class="planet-image-real">
+                        <h3>Saturn</h3>
+                        <div class="drop-zone" data-planet="saturn"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="uranus">
+                        <img src="images/uranus.png?v=1735362000" alt="Uranus" class="planet-image-real">
+                        <h3>Uranus</h3>
+                        <div class="drop-zone" data-planet="uranus"></div>
+                    </div>
+
+                    <div class="planet-card" data-planet="neptune">
+                        <img src="images/neptune.jpg?v=1735362000" alt="Neptune" class="planet-image-real">
+                        <h3>Neptune</h3>
+                        <div class="drop-zone" data-planet="neptune"></div>
+                    </div>
+                </div>
+
+                <!-- Facts to Drag -->
+                <div class="facts-container">
+                    <h2>Planet Facts</h2>
+                    <div class="facts-grid">
+                        <div class="fact-card" draggable="true" data-fact="hottest" data-answer="venus">
+                            <span class="fact-icon">🔥</span>
+                            <span class="fact-text">Hottest Planet</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="smallest" data-answer="mercury">
+                            <span class="fact-icon">🤏</span>
+                            <span class="fact-text">Smallest Planet</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="biggest" data-answer="jupiter">
+                            <span class="fact-icon">🌟</span>
+                            <span class="fact-text">Biggest Planet</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="most-moons" data-answer="saturn">
+                            <span class="fact-icon">🌙</span>
+                            <span class="fact-text">Most Moons</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="our-home" data-answer="earth">
+                            <span class="fact-icon">🏠</span>
+                            <span class="fact-text">Our Home Planet</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="red-planet" data-answer="mars">
+                            <span class="fact-icon">🔴</span>
+                            <span class="fact-text">The Red Planet</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="rings" data-answer="saturn">
+                            <span class="fact-icon">💍</span>
+                            <span class="fact-text">Beautiful Rings</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="farthest" data-answer="neptune">
+                            <span class="fact-icon">🌊</span>
+                            <span class="fact-text">Farthest from Sun</span>
+                        </div>
+
+                        <div class="fact-card" draggable="true" data-fact="sideways" data-answer="uranus">
+                            <span class="fact-icon">🔄</span>
+                            <span class="fact-text">Rolls on Its Side</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-area">
+                <div class="message" id="message">Drag the facts to the correct planets!</div>
+                <button id="reset-btn" class="reset-button">🔄 Reset Game</button>
+            </div>
+
+            <!-- Celebration Dialog -->
+            <div id="celebration-dialog" class="celebration-dialog hidden">
+                <div class="dialog-content">
+                    <h2>🎉 Congratulations! 🎉</h2>
+                    <p>You completed the Planet Explorer game!</p>
+                    <p>You are now a <strong>Planet Expert</strong>! 🌟</p>
+                    <button id="play-again-btn" class="play-again-button">🚀 Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Solar System Game Tab -->
+        <div id="create-game" class="game-tab active">
+            <div class="game-instructions">
+                <p>Drag the planets to create your own solar system!</p>
+            </div>
+
+            <div class="create-game-area">
+                <div class="space-canvas" style="background-image: url('images/space background.png?v=1735362000');">
+                    <div class="planet-drop-zones">
+                        <div class="orbit-zone" data-position="1" data-planet="mercury"></div>
+                        <div class="orbit-zone" data-position="2" data-planet="venus"></div>
+                        <div class="orbit-zone" data-position="3" data-planet="earth"></div>
+                        <div class="orbit-zone" data-position="4" data-planet="mars"></div>
+                        <div class="orbit-zone" data-position="5" data-planet="jupiter"></div>
+                        <div class="orbit-zone" data-position="6" data-planet="saturn"></div>
+                        <div class="orbit-zone" data-position="7" data-planet="uranus"></div>
+                        <div class="orbit-zone" data-position="8" data-planet="neptune"></div>
+                    </div>
+                </div>
+
+                <div class="planet-palette">
+                    <h3>Drag Planets to Space</h3>
+                    <div class="planet-buttons">
+                        <div class="planet-button" draggable="true" data-planet="mercury">
+                            <img src="images/mercury.png?v=1735362000" alt="Mercury" class="planet-mini-image">
+                            <span>Mercury</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="venus">
+                            <img src="images/Venus.jpg?v=1735362000" alt="Venus" class="planet-mini-image">
+                            <span>Venus</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="earth">
+                            <img src="images/earth.png?v=1735362000" alt="Earth" class="planet-mini-image">
+                            <span>Earth</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="mars">
+                            <img src="images/mars.png?v=1735362000" alt="Mars" class="planet-mini-image">
+                            <span>Mars</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="jupiter">
+                            <img src="images/jupiter.jpg?v=1735362000" alt="Jupiter" class="planet-mini-image">
+                            <span>Jupiter</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="saturn">
+                            <img src="images/saturn.jpg?v=1735362000" alt="Saturn" class="planet-mini-image">
+                            <span>Saturn</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="uranus">
+                            <img src="images/uranus.png?v=1735362000" alt="Uranus" class="planet-mini-image">
+                            <span>Uranus</span>
+                        </div>
+                        <div class="planet-button" draggable="true" data-planet="neptune">
+                            <img src="images/neptune.jpg?v=1735362000" alt="Neptune" class="planet-mini-image">
+                            <span>Neptune</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="create-message-area">
+                <div class="message" id="create-message">Build your solar system by dragging planets!</div>
+                <button id="clear-system-btn" class="reset-button">🗑️ Clear System</button>
+            </div>
+
+            <!-- Create Game Celebration Dialog -->
+            <div id="create-celebration-dialog" class="celebration-dialog hidden">
+                <div class="dialog-content">
+                    <img src="images/tara space.png?v=1735362000" alt="Celebration" class="celebration-image">
+                    <h2>🎉 Solar System Master! 🎉</h2>
+                    <p>You successfully created our entire solar system!</p>
+                    <p>You are now a <strong>Space Explorer</strong>! 🚀</p>
+                    <button id="build-again-btn" class="play-again-button">🏗️ Build Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
