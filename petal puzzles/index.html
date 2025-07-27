@@ -766,6 +766,7 @@
     <span style="font-size:1.5em;">🏠</span>
     <span>Back to all games</span>
 </a>
+
     <div class="header">
         <img src="petal puzzles title.png" alt="Petal Puzzles" class="title-image">
         <div class="instructions" id="instructions">
@@ -777,8 +778,8 @@
         <button class="btn mode-btn active" data-mode="addition"> 🌸Flower-sums</button>
         <button class="btn mode-btn" data-mode="bee-match"> 🐝Bee-quation</button>
         <select class="difficulty-dropdown" id="difficulty-select">
-            <option value="easy">😊 Easy</option>
-            <option value="medium" selected>😐 Medium</option>
+            <option value="easy" selected>😊 Easy</option>
+            <option value="medium">😐 Medium</option>
             <option value="difficult">🤓 Difficult</option>
         </select>
     </div>
@@ -836,7 +837,7 @@
         class PetalPuzzles {
             constructor() {
                 this.currentMode = 'addition';
-                this.currentDifficulty = 'medium';
+                this.currentDifficulty = 'easy';
                 this.currentProblem = null;
                 this.selectedNumbers = [];
                 this.selectedOperators = [];
@@ -903,59 +904,66 @@
 
             generateMathEquation() {
                 let equation;
+                let attempts = 0;
+                const maxAttempts = 50;
                 
-                if (this.currentDifficulty === 'easy') {
-                    // Easy mode: Only + and - with numbers 1-10
-                    const operations = ['+', '-'];
-                    const operator = operations[Math.floor(Math.random() * operations.length)];
+                while (attempts < maxAttempts) {
+                    attempts++;
                     
-                    let num1, num2, result;
-                    
-                    if (operator === '+') {
-                        // Addition: ensure result is reasonable
-                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
-                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
-                        result = num1 + num2;
+                    if (this.currentDifficulty === 'easy') {
+                        // Easy mode: Only + and - with numbers 1-10
+                        const operations = ['+', '-'];
+                        const operator = operations[Math.floor(Math.random() * operations.length)];
+                        
+                        let num1, num2, result;
+                        
+                        if (operator === '+') {
+                            // Addition: ensure result is reasonable
+                            num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                            num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                            result = num1 + num2;
+                        } else {
+                            // Subtraction: ensure positive result
+                            result = Math.floor(Math.random() * 10) + 1; // 1-10
+                            num2 = Math.floor(Math.random() * result) + 1; // 1 to result
+                            num1 = result + num2;
+                        }
+                        
+                        equation = {
+                            numbers: [num1, num2],
+                            operators: [operator],
+                            result: result,
+                            display: `${num1} ? ${num2} = ?`
+                        };
+                        return equation;
+                    } else if (this.currentDifficulty === 'medium') {
+                        // Medium mode: + and - with numbers 1-20 (current easy)
+                        const operations = ['+', '-'];
+                        const operator = operations[Math.floor(Math.random() * operations.length)];
+                        
+                        let num1, num2, result;
+                        
+                        if (operator === '+') {
+                            // Addition: ensure result is reasonable
+                            num1 = Math.floor(Math.random() * 15) + 1; // 1-15
+                            num2 = Math.floor(Math.random() * 15) + 1; // 1-15
+                            result = num1 + num2;
+                        } else {
+                            // Subtraction: ensure positive result
+                            result = Math.floor(Math.random() * 15) + 1; // 1-15
+                            num2 = Math.floor(Math.random() * result) + 1; // 1 to result
+                            num1 = result + num2;
+                        }
+                        
+                        equation = {
+                            numbers: [num1, num2],
+                            operators: [operator],
+                            result: result,
+                            display: `${num1} ? ${num2} = ?`
+                        };
+                        return equation;
                     } else {
-                        // Subtraction: ensure positive result
-                        result = Math.floor(Math.random() * 10) + 1; // 1-10
-                        num2 = Math.floor(Math.random() * result) + 1; // 1 to result
-                        num1 = result + num2;
-                    }
-                    
-                    equation = {
-                        numbers: [num1, num2],
-                        operators: [operator],
-                        result: result,
-                        display: `${num1} ? ${num2} = ?`
-                    };
-                } else if (this.currentDifficulty === 'medium') {
-                    // Medium mode: + and - with numbers 1-20 (current easy)
-                    const operations = ['+', '-'];
-                    const operator = operations[Math.floor(Math.random() * operations.length)];
-                    
-                    let num1, num2, result;
-                    
-                    if (operator === '+') {
-                        // Addition: ensure result is reasonable
-                        num1 = Math.floor(Math.random() * 15) + 1; // 1-15
-                        num2 = Math.floor(Math.random() * 15) + 1; // 1-15
-                        result = num1 + num2;
-                    } else {
-                        // Subtraction: ensure positive result
-                        result = Math.floor(Math.random() * 15) + 1; // 1-15
-                        num2 = Math.floor(Math.random() * result) + 1; // 1 to result
-                        num1 = result + num2;
-                    }
-                    
-                    equation = {
-                        numbers: [num1, num2],
-                        operators: [operator],
-                        result: result,
-                        display: `${num1} ? ${num2} = ?`
-                    };
-                } else {
-                    // Difficult mode: All operations (current hard)
+                        // Difficult mode: All operations (current hard)
                     const operations = ['+', '-', '×', '÷'];
                     const operator1 = operations[Math.floor(Math.random() * operations.length)];
                     const operator2 = operations[Math.floor(Math.random() * operations.length)];
@@ -1026,7 +1034,7 @@
                     // Ensure all numbers are positive integers
                     if (num1 <= 0 || num2 <= 0 || num3 <= 0 || result <= 0 || 
                         !Number.isInteger(num1) || !Number.isInteger(num2) || !Number.isInteger(num3) || !Number.isInteger(result)) {
-                        return this.generateMathEquation(); // Try again
+                        continue; // Try again with next iteration
                     }
                     
                     equation = {
@@ -1035,89 +1043,122 @@
                         result: result,
                         display: `${num1} ? ${num2} ? ${num3} = ?`
                     };
+                    
+                    return equation; // Successfully generated
+                    }
                 }
                 
-                return equation;
+                // If we couldn't generate a valid equation after max attempts, return a simple fallback
+                return {
+                    numbers: [5, 3],
+                    operators: ['+'],
+                    result: 8,
+                    display: '5 ? 3 = ?'
+                };
             }
 
             generateAdditionProblem() {
-                let numbers = [];
-                let targetSum;
+                let attempts = 0;
+                const maxAttempts = 50;
                 
-                if (this.currentDifficulty === 'easy') {
-                    // Easy mode: Generate a simple sum for sum-selection mode
-                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
-                    targetSum = Math.floor(Math.random() * 15) + 6; // 6-20
+                while (attempts < maxAttempts) {
+                    attempts++;
+                    let numbers = [];
+                    let targetSum;
                     
-                    let remaining = targetSum;
-                    for (let i = 0; i < numCount - 1; i++) {
-                        const minVal = 1;
-                        const maxVal = Math.min(remaining - (numCount - i - 1), 8);
-                        if (maxVal < minVal) {
-                            return this.generateAdditionProblem();
+                    if (this.currentDifficulty === 'easy') {
+                        // Easy mode: Generate a simple sum for sum-selection mode
+                        const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                        targetSum = Math.floor(Math.random() * 15) + 6; // 6-20
+                        
+                        let remaining = targetSum;
+                        let validGeneration = true;
+                        
+                        for (let i = 0; i < numCount - 1; i++) {
+                            const minVal = 1;
+                            const maxVal = Math.min(remaining - (numCount - i - 1), 8);
+                            if (maxVal < minVal) {
+                                validGeneration = false;
+                                break;
+                            }
+                            const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                            numbers.push(num);
+                            remaining -= num;
                         }
-                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-                        numbers.push(num);
-                        remaining -= num;
-                    }
-                    if (remaining > 0 && remaining < targetSum) {
-                        numbers.push(remaining);
-                    } else {
-                        return this.generateAdditionProblem();
-                    }
-                } else if (this.currentDifficulty === 'medium') {
-                    // Medium mode: Fill petals mode (current easy)
-                    targetSum = Math.floor(Math.random() * 15) + 6;
-                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
-                    
-                    let remaining = targetSum;
-                    for (let i = 0; i < numCount - 1; i++) {
-                        const minVal = 1;
-                        const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 8);
-                        if (maxVal < minVal) {
-                            return this.generateAdditionProblem();
+                        
+                        if (validGeneration && remaining > 0 && remaining < targetSum) {
+                            numbers.push(remaining);
+                        } else {
+                            continue; // Try again
                         }
-                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-                        numbers.push(num);
-                        remaining -= num;
-                    }
-                    if (remaining > 0 && remaining < targetSum) {
-                        numbers.push(remaining);
-                    } else {
-                        return this.generateAdditionProblem();
-                    }
-                } else {
-                    // Difficult mode: Fill petals mode (current hard)
-                    targetSum = Math.floor(Math.random() * 35) + 15;
-                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
-                    
-                    let remaining = targetSum;
-                    for (let i = 0; i < numCount - 1; i++) {
-                        const minVal = 1;
-                        const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 20);
-                        if (maxVal < minVal) {
-                            return this.generateAdditionProblem();
+                    } else if (this.currentDifficulty === 'medium') {
+                        // Medium mode: Fill petals mode (current easy)
+                        targetSum = Math.floor(Math.random() * 15) + 6;
+                        const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                        
+                        let remaining = targetSum;
+                        let validGeneration = true;
+                        
+                        for (let i = 0; i < numCount - 1; i++) {
+                            const minVal = 1;
+                            const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 8);
+                            if (maxVal < minVal) {
+                                validGeneration = false;
+                                break;
+                            }
+                            const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                            numbers.push(num);
+                            remaining -= num;
                         }
-                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-                        numbers.push(num);
-                        remaining -= num;
-                    }
-                    if (remaining > 0 && remaining < targetSum) {
-                        numbers.push(remaining);
+                        
+                        if (validGeneration && remaining > 0 && remaining < targetSum) {
+                            numbers.push(remaining);
+                        } else {
+                            continue; // Try again
+                        }
                     } else {
-                        return this.generateAdditionProblem();
+                        // Difficult mode: Fill petals mode (current hard)
+                        targetSum = Math.floor(Math.random() * 35) + 15;
+                        const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                        
+                        let remaining = targetSum;
+                        let validGeneration = true;
+                        
+                        for (let i = 0; i < numCount - 1; i++) {
+                            const minVal = 1;
+                            const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 20);
+                            if (maxVal < minVal) {
+                                validGeneration = false;
+                                break;
+                            }
+                            const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                            numbers.push(num);
+                            remaining -= num;
+                        }
+                        
+                        if (validGeneration && remaining > 0 && remaining < targetSum) {
+                            numbers.push(remaining);
+                        } else {
+                            continue; // Try again
+                        }
                     }
-                }
 
-                // Verify the numbers actually add up to target
-                const sum = numbers.reduce((a, b) => a + b, 0);
-                if (sum !== targetSum) {
-                    return this.generateAdditionProblem();
-                }
+                    // Verify the numbers actually add up to target
+                    const sum = numbers.reduce((a, b) => a + b, 0);
+                    if (sum !== targetSum) {
+                        continue; // Try again
+                    }
 
+                    return {
+                        numbers: numbers,
+                        answer: targetSum
+                    };
+                }
+                
+                // If we couldn't generate a valid problem after max attempts, return a simple fallback
                 return {
-                    numbers: numbers,
-                    answer: targetSum
+                    numbers: [3, 2],
+                    answer: 5
                 };
             }
 
@@ -1200,7 +1241,9 @@
                 const answerOptions = [this.currentProblem.answer];
                 
                 // Add 4 wrong answers
-                while (answerOptions.length < 5) {
+                let attempts = 0;
+                while (answerOptions.length < 5 && attempts < 50) {
+                    attempts++;
                     let wrongAnswer;
                     if (Math.random() < 0.5) {
                         // Sometimes make it close to the correct answer
@@ -1252,7 +1295,9 @@
                 const availableNumbers = [...this.currentProblem.numbers];
                 
                 // Add wrong answers - all smaller than target and ensure we have exactly the right count
-                while (availableNumbers.length < 8) {
+                let attempts = 0;
+                while (availableNumbers.length < 8 && attempts < 50) {
+                    attempts++;
                     const wrongNum = Math.floor(Math.random() * (this.currentProblem.answer - 1)) + 1;
                     if (!availableNumbers.includes(wrongNum)) {
                         availableNumbers.push(wrongNum);
@@ -1543,7 +1588,9 @@
                 const answers = [this.currentProblem.result];
                 
                 // Add wrong answers
-                while (answers.length < 5) {
+                let attempts = 0;
+                while (answers.length < 5 && attempts < 50) {
+                    attempts++;
                     let wrongAnswer;
                     if (this.currentDifficulty === 'easy') {
                         wrongAnswer = Math.floor(Math.random() * 20) + 1;
