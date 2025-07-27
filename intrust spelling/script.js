@@ -98,22 +98,48 @@ const easyWordsArray = [
 ];
 
 const difficultWordsArray = [
+    { word: "bird", image: "images/difficult/bird.jpg" },
     { word: "boat", image: "images/difficult/boat.jpg" },
     { word: "cheek", image: "images/difficult/cheek.jpg" },
     { word: "chick", image: "images/difficult/chick.jpg" },
     { word: "child", image: "images/difficult/child.jpg" },
     { word: "chin", image: "images/difficult/chin.jpg" },
     { word: "chip", image: "images/difficult/chip.png" },
+    { word: "church", image: "images/difficult/church.png" },
     { word: "coin", image: "images/difficult/coin.jpg" },
+    { word: "cook", image: "images/difficult/cook.jpg" },
+    { word: "crown", image: "images/difficult/crown.png" },
+    { word: "doctor", image: "images/difficult/doctor.png" },
+    { word: "farmer", image: "images/difficult/farmer.jpg" },
+    { word: "grandfather", image: "images/difficult/grandfather.jpg" },
+    { word: "grandmother", image: "images/difficult/grandmother.jpg" },
     { word: "happy", image: "images/difficult/happy.jpg" },
     { word: "heel", image: "images/difficult/heel.jpg" },
+    { word: "horse", image: "images/difficult/horse.png" },
     { word: "king", image: "images/difficult/king.jpg" },
+    { word: "mirror", image: "images/difficult/mirror.png" },
     { word: "moon", image: "images/difficult/moon.jpg" },
     { word: "queen", image: "images/difficult/queen.png" },
     { word: "rain", image: "images/difficult/rain.jpg" },
     { word: "road", image: "images/difficult/road.jpg" },
-    { word: "soap", image: "images/difficult/soap.jpg" }
+    { word: "root", image: "images/difficult/root.jpg" },
+    { word: "sauce", image: "images/difficult/sauce.jpg" },
+    { word: "shark", image: "images/difficult/shark.jpg" },
+    { word: "sheep", image: "images/difficult/sheep.png" },
+    { word: "shell", image: "images/difficult/shell.png" },
+    { word: "shirt", image: "images/difficult/shirt.png" },
+    { word: "shoes", image: "images/difficult/shoes.png" },
+    { word: "skirt", image: "images/difficult/skirt.jpg" },
+    { word: "sleep", image: "images/difficult/sleep.jpg" },
+    { word: "snow", image: "images/difficult/snow.png" },
+    { word: "soap", image: "images/difficult/soap.jpg" },
+    { word: "stairs", image: "images/difficult/stairs.png" },
+    { word: "stitch", image: "images/difficult/stitch.jpg" },
+    { word: "stone", image: "images/difficult/stone.jpg" },
+    { word: "swing", image: "images/difficult/swing.png" },
+    { word: "tractor", image: "images/difficult/tractor.png" }
 ];
+
 
 const wordData = {
     easy: easyWordsArray,
