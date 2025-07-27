@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petal Puzzles - Simple Addition Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            color: #2E8B57;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .title-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .instructions {
+            background: rgba(255,255,255,0.8);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px auto;
+            max-width: 600px;
+            font-size: 1.1em;
+            color: #2E8B57;
+            border: 2px solid #98FB98;
+        }
+
+        .flower-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .flower-emoji-rain {
+            position: absolute;
+            font-size: 1.5em;
+            animation: fall 2s linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .mode-btn {
+            background: #ADD8E6;
+            color: #2E5090;
+        }
+
+        .mode-btn.active {
+            background: #4682B4;
+            color: white;
+        }
+
+        .difficulty-btn {
+            background: #98FB98;
+            color: #2E8B57;
+        }
+
+        .difficulty-btn.active {
+            background: #2E8B57;
+            color: white;
+        }
+
+        .new-game-btn {
+            background: #FF69B4;
+            color: white;
+        }
+
+        .difficulty-dropdown {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-family: inherit;
+            background: #B0E0E6;
+            color: #2E5090;
+            font-weight: bold;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E5090' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 50px;
+        }
+
+        .difficulty-dropdown:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background-color: #87CEEB;
+        }
+
+        .difficulty-dropdown:focus {
+            background-color: #4682B4;
+            color: white;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 500px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        /* Addition Mode Styles */
+        .addition-mode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            background: transparent;
+        }
+
+        .flower {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        
+        .flower::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('flower reference 2.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            z-index: 1;
+            /* Remove white background if the PNG has white instead of transparency */
+            filter: drop-shadow(0 0 0 transparent);
+            mix-blend-mode: darken;
+        }
+
+        .flower-center {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8em;
+            font-weight: bold;
+            color: #8B4513;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 20;
+            position: relative;
+            border: 3px solid #DAA520;
+            backdrop-filter: blur(2px);
+            transform: translateY(-50px);
+            transform: translateX(5px);
+        }
+
+        .flower.bloomed .flower-center {
+            background: linear-gradient(45deg, #32CD32, #90EE90);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);
+        }
+
+        .flower-petal {
+            position: absolute;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 4px solid #1E90FF;
+            background: rgba(30, 144, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            z-index: 15;
+        }
+
+        .flower-petal.filled {
+            border: 3px solid #32CD32;
+            background: rgba(30, 144, 255, 0.8);
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.5);
+        }
+
+        .flower-petal.inactive {
+            display: none;
+        }
+
+        .flower-petal.selected {
+            border: 3px solid #FF6347;
+            background: rgba(255, 99, 71, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 99, 71, 0.5);
+        }
+
+        .flower-petal.error {
+            border: 3px solid #FF0000;
+            background: rgba(255, 0, 0, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .petal-slots {
+            display: none; /* Hide the old slots since petals are now part of the flower */
+        }
+
+        .petal-slot {
+            width: 80px;
+            height: 80px;
+            border: 3px dashed #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            background: rgba(255,255,255,0.7);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .petal-slot.filled {
+            border: 3px solid #32CD32;
+            background: #98FB98;
+        }
+
+        .petal-slot.error {
+            border: 3px solid #FF0000;
+            background: #FFB6C1;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .available-petals {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .petal {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #FF69B4, #FFB6C1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            user-select: none;
+            border: 3px solid transparent;
+        }
+
+        .petal:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .petal.selected {
+            border-color: #32CD32;
+            background: linear-gradient(45deg, #32CD32, #90EE90);
+        }
+
+        .petal.wrong {
+            border-color: #FF0000;
+            background: linear-gradient(45deg, #FF0000, #FFB6C1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Bee Match Mode Styles */
+        .bee-match-mode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .equation-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 3em;
+            font-weight: bold;
+            color: #2E8B57;
+            margin: 20px 0;
+        }
+
+        .number-flower {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 3px solid #FF1493;
+        }
+
+        .operator-slot {
+            width: 80px;
+            height: 80px;
+            border: 3px dashed #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            background: rgba(255,255,255,0.8);
+            color: #666;
+        }
+
+        .operator-slot.filled {
+            border: 3px solid #32CD32;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #8B4513;
+        }
+
+        .answer-slot {
+            width: 100px;
+            height: 100px;
+            border: 3px dashed #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            background: rgba(255,255,255,0.8);
+            color: #666;
+        }
+
+        .answer-slot.filled {
+            border: 3px solid #32CD32;
+            background: linear-gradient(45deg, #98FB98, #90EE90);
+            color: #2E8B57;
+        }
+
+        .selection-area {
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        .operators-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .operators-section h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .available-operators {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .operator-bee {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 25px;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #8B4513;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            user-select: none;
+            border: 3px solid transparent;
+            min-width: 60px;
+        }
+
+        .operator-bee:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .operator-bee.selected {
+            border-color: #32CD32;
+            background: linear-gradient(45deg, #32CD32, #90EE90);
+            color: white;
+        }
+
+        .operator-bee.used {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .operator-bee::before {
+            content: "🐝 ";
+        }
+
+        .answers-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .answers-section h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .available-answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .answer-butterfly {
+            background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+            border-radius: 25px;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            user-select: none;
+            border: 3px solid transparent;
+            min-width: 60px;
+        }
+
+        .answer-butterfly:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .answer-butterfly.selected {
+            border-color: #32CD32;
+            background: linear-gradient(45deg, #32CD32, #90EE90);
+        }
+
+        .answer-butterfly.used {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .answer-butterfly::before {
+            content: "🦋 ";
+        }
+
+        .flower-field {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .flower-card {
+            background: #F0F8FF;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .flower-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .flower-card.correct {
+            background: linear-gradient(45deg, #98FB98, #90EE90);
+            border-color: #32CD32;
+            animation: bloom 0.6s ease-in-out;
+        }
+
+        .flower-card.error {
+            border-color: #FF0000;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .flower-emoji {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .flower-problem {
+            font-size: 1.5em;
+            color: #2E8B57;
+            font-weight: bold;
+        }
+
+        .bee-panel {
+            background: #FFF8DC;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .bee-panel h3 {
+            text-align: center;
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .available-bees {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bee {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 25px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #8B4513;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            user-select: none;
+            border: 3px solid transparent;
+        }
+
+        .bee:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .bee.selected {
+            border-color: #32CD32;
+            background: linear-gradient(45deg, #32CD32, #90EE90);
+        }
+
+        .bee.wrong {
+            border-color: #FF0000;
+            background: linear-gradient(45deg, #FF0000, #FFB6C1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .bee::before {
+            content: "🐝 ";
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 2em;
+            color: #32CD32;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: celebrationPop 0.5s ease-in-out;
+        }
+
+        .celebration-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 1.5em;
+            color: #8B4513;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            z-index: 1001;
+            display: none;
+            border: 4px solid #DAA520;
+        }
+
+        .celebration-dialog h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .celebration-dialog p {
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .celebration-image {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+        }
+
+        .play-again-btn {
+            background: #32CD32;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .play-again-btn:hover {
+            background: #228B22;
+            transform: scale(1.05);
+        }
+
+        @keyframes celebrationPop {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .equation {
+            font-size: 2em;
+            color: #2E8B57;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .bee-match-mode {
+                grid-template-columns: 1fr;
+            }
+            
+            .flower-field {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .flower {
+                width: 250px;
+                height: 250px;
+                font-size: 2.5em;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .controls {
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="petal puzzles title.png" alt="Petal Puzzles" class="title-image">
+        <div class="instructions" id="instructions">
+            <p><strong>Flower-sums:</strong> Look at the numbers in the petals and tap the correct sum!</p>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn mode-btn active" data-mode="addition"> 🌸Flower-sums</button>
+        <button class="btn mode-btn" data-mode="bee-match"> 🐝Bee-quation</button>
+        <select class="difficulty-dropdown" id="difficulty-select">
+            <option value="easy">😊 Easy</option>
+            <option value="medium" selected>😐 Medium</option>
+            <option value="difficult">🤓 Difficult</option>
+        </select>
+    </div>
+
+    <div class="game-container">
+        <!-- Addition Mode -->
+        <div id="addition-mode" class="addition-mode">
+            <div class="flower" id="main-flower">
+                <div class="flower-center" id="flower-center"></div>
+            </div>
+            <div class="equation" id="equation">Fill the petals to make the sum!</div>
+            <div class="petal-slots">
+                <div class="petal-slot" data-slot="0">?</div>
+                <div class="petal-slot" data-slot="1">?</div>
+            </div>
+            <div class="available-petals" id="available-petals"></div>
+        </div>
+
+        <!-- Bee Match Mode -->
+        <div id="bee-match-mode" class="bee-match-mode hidden">
+            <div class="equation-display" id="equation-display">
+                <!-- Numbers and operators will be dynamically generated here -->
+            </div>
+            <div class="selection-area">
+                <div class="operators-section">
+                    <h3>🐝 Operators 🐝</h3>
+                    <div class="available-operators" id="available-operators">
+                        <!-- Operator bees will be generated here -->
+                    </div>
+                </div>
+                <div class="answers-section">
+                    <h3>🦋 Answers 🦋</h3>
+                    <div class="available-answers" id="available-answers">
+                        <!-- Answer butterflies will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        🎉 Fantastic! Well done! 🎉
+    </div>
+
+    <div class="celebration-dialog" id="celebration-dialog">
+        <h2>🏆 Amazing Work! 🏆</h2>
+        <img src="celebration.png" alt="Celebration" class="celebration-image">
+        <p>You completed 3 puzzles perfectly!</p>
+        <button class="play-again-btn" onclick="game.playAgain()">🎮 Play Again</button>
+    </div>
+
+    <div class="flower-rain" id="flower-rain"></div>
+
+    <script>
+        class PetalPuzzles {
+            constructor() {
+                this.currentMode = 'addition';
+                this.currentDifficulty = 'medium';
+                this.currentProblem = null;
+                this.selectedNumbers = [];
+                this.selectedOperators = [];
+                this.selectedAnswer = null;
+                this.correctAnswers = 0;
+                this.wrongAttempts = 0;
+                this.setupEventListeners();
+                this.startNewGame();
+            }
+
+            setupEventListeners() {
+                // Mode and difficulty buttons
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentMode = e.target.dataset.mode;
+                        this.switchMode();
+                    });
+                });
+
+                // Difficulty dropdown
+                document.getElementById('difficulty-select').addEventListener('change', (e) => {
+                    this.currentDifficulty = e.target.value;
+                    if (this.currentMode === 'addition') {
+                        this.updateAdditionInstructions();
+                    }
+                    this.startNewGame();
+                });
+            }
+
+            switchMode() {
+                if (this.currentMode === 'addition') {
+                    document.getElementById('addition-mode').classList.remove('hidden');
+                    document.getElementById('bee-match-mode').classList.add('hidden');
+                    this.updateAdditionInstructions();
+                } else {
+                    document.getElementById('addition-mode').classList.add('hidden');
+                    document.getElementById('bee-match-mode').classList.remove('hidden');
+                    document.getElementById('instructions').innerHTML = '<p><strong>Bee-quation:</strong> Tap the operator bee(s) and answer butterfly to complete the equation!</p>';
+                }
+                this.startNewGame();
+            }
+
+            updateAdditionInstructions() {
+                let instructionText;
+                if (this.currentDifficulty === 'easy') {
+                    instructionText = '<p><strong>Flower-sums - Easy:</strong> Look at the numbers in the petals and tap the correct sum!</p>';
+                } else if (this.currentDifficulty === 'medium') {
+                    instructionText = '<p><strong>Flower-sums - Medium:</strong> Tap numbers to fill the petals and make the target sum!</p>';
+                } else {
+                    instructionText = '<p><strong>Flower-sums - Difficult:</strong> Tap numbers to fill the petals and make the target sum!</p>';
+                }
+                document.getElementById('instructions').innerHTML = instructionText;
+            }
+
+            getRandomNumber() {
+                if (this.currentDifficulty === 'easy') {
+                    return Math.floor(Math.random() * 20) + 1;
+                } else {
+                    return Math.floor(Math.random() * 100) + 1;
+                }
+            }
+
+            generateMathEquation() {
+                let equation;
+                
+                if (this.currentDifficulty === 'easy') {
+                    // Easy mode: Only + and - with numbers 1-10
+                    const operations = ['+', '-'];
+                    const operator = operations[Math.floor(Math.random() * operations.length)];
+                    
+                    let num1, num2, result;
+                    
+                    if (operator === '+') {
+                        // Addition: ensure result is reasonable
+                        num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                        result = num1 + num2;
+                    } else {
+                        // Subtraction: ensure positive result
+                        result = Math.floor(Math.random() * 10) + 1; // 1-10
+                        num2 = Math.floor(Math.random() * result) + 1; // 1 to result
+                        num1 = result + num2;
+                    }
+                    
+                    equation = {
+                        numbers: [num1, num2],
+                        operators: [operator],
+                        result: result,
+                        display: `${num1} ? ${num2} = ?`
+                    };
+                } else if (this.currentDifficulty === 'medium') {
+                    // Medium mode: + and - with numbers 1-20 (current easy)
+                    const operations = ['+', '-'];
+                    const operator = operations[Math.floor(Math.random() * operations.length)];
+                    
+                    let num1, num2, result;
+                    
+                    if (operator === '+') {
+                        // Addition: ensure result is reasonable
+                        num1 = Math.floor(Math.random() * 15) + 1; // 1-15
+                        num2 = Math.floor(Math.random() * 15) + 1; // 1-15
+                        result = num1 + num2;
+                    } else {
+                        // Subtraction: ensure positive result
+                        result = Math.floor(Math.random() * 15) + 1; // 1-15
+                        num2 = Math.floor(Math.random() * result) + 1; // 1 to result
+                        num1 = result + num2;
+                    }
+                    
+                    equation = {
+                        numbers: [num1, num2],
+                        operators: [operator],
+                        result: result,
+                        display: `${num1} ? ${num2} = ?`
+                    };
+                } else {
+                    // Difficult mode: All operations (current hard)
+                    const operations = ['+', '-', '×', '÷'];
+                    const operator1 = operations[Math.floor(Math.random() * operations.length)];
+                    const operator2 = operations[Math.floor(Math.random() * operations.length)];
+                    
+                    let num1, num2, num3, result;
+                    
+                    // Generate numbers based on operations to ensure whole number results
+                    if (operator1 === '÷' || operator2 === '÷') {
+                        // If division is involved, work backwards from result
+                        result = Math.floor(Math.random() * 20) + 1; // 1-20
+                        
+                        if (operator1 === '÷' && operator2 === '÷') {
+                            // Both divisions: a ÷ b ÷ c = result
+                            num3 = Math.floor(Math.random() * 5) + 2; // 2-6
+                            num2 = Math.floor(Math.random() * 5) + 2; // 2-6
+                            num1 = result * num2 * num3;
+                        } else if (operator1 === '÷') {
+                            // First operation is division: a ÷ b op2 c = result
+                            num2 = Math.floor(Math.random() * 5) + 2; // 2-6
+                            num3 = Math.floor(Math.random() * 10) + 1; // 1-10
+                            
+                            if (operator2 === '+') {
+                                num1 = (result - num3) * num2;
+                            } else if (operator2 === '-') {
+                                num1 = (result + num3) * num2;
+                            } else if (operator2 === '×') {
+                                num1 = (result / num3) * num2;
+                            }
+                        } else {
+                            // Second operation is division: a op1 b ÷ c = result
+                            num3 = Math.floor(Math.random() * 5) + 2; // 2-6
+                            const intermediateResult = result * num3;
+                            
+                            num1 = Math.floor(Math.random() * 10) + 1; // 1-10
+                            if (operator1 === '+') {
+                                num2 = intermediateResult - num1;
+                            } else if (operator1 === '-') {
+                                num2 = num1 - intermediateResult;
+                            } else if (operator1 === '×') {
+                                num2 = intermediateResult / num1;
+                            }
+                        }
+                    } else {
+                        // No division, simpler generation
+                        num1 = Math.floor(Math.random() * 20) + 1; // 1-20
+                        num2 = Math.floor(Math.random() * 20) + 1; // 1-20
+                        num3 = Math.floor(Math.random() * 20) + 1; // 1-20
+                        
+                        // Calculate result with proper order of operations
+                        let temp;
+                        if (operator1 === '×') {
+                            temp = num1 * num2;
+                        } else if (operator1 === '+') {
+                            temp = num1 + num2;
+                        } else {
+                            temp = num1 - num2;
+                        }
+                        
+                        if (operator2 === '×') {
+                            result = temp * num3;
+                        } else if (operator2 === '+') {
+                            result = temp + num3;
+                        } else {
+                            result = temp - num3;
+                        }
+                    }
+                    
+                    // Ensure all numbers are positive integers
+                    if (num1 <= 0 || num2 <= 0 || num3 <= 0 || result <= 0 || 
+                        !Number.isInteger(num1) || !Number.isInteger(num2) || !Number.isInteger(num3) || !Number.isInteger(result)) {
+                        return this.generateMathEquation(); // Try again
+                    }
+                    
+                    equation = {
+                        numbers: [num1, num2, num3],
+                        operators: [operator1, operator2],
+                        result: result,
+                        display: `${num1} ? ${num2} ? ${num3} = ?`
+                    };
+                }
+                
+                return equation;
+            }
+
+            generateAdditionProblem() {
+                let numbers = [];
+                let targetSum;
+                
+                if (this.currentDifficulty === 'easy') {
+                    // Easy mode: Generate a simple sum for sum-selection mode
+                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                    targetSum = Math.floor(Math.random() * 15) + 6; // 6-20
+                    
+                    let remaining = targetSum;
+                    for (let i = 0; i < numCount - 1; i++) {
+                        const minVal = 1;
+                        const maxVal = Math.min(remaining - (numCount - i - 1), 8);
+                        if (maxVal < minVal) {
+                            return this.generateAdditionProblem();
+                        }
+                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                        numbers.push(num);
+                        remaining -= num;
+                    }
+                    if (remaining > 0 && remaining < targetSum) {
+                        numbers.push(remaining);
+                    } else {
+                        return this.generateAdditionProblem();
+                    }
+                } else if (this.currentDifficulty === 'medium') {
+                    // Medium mode: Fill petals mode (current easy)
+                    targetSum = Math.floor(Math.random() * 15) + 6;
+                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                    
+                    let remaining = targetSum;
+                    for (let i = 0; i < numCount - 1; i++) {
+                        const minVal = 1;
+                        const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 8);
+                        if (maxVal < minVal) {
+                            return this.generateAdditionProblem();
+                        }
+                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                        numbers.push(num);
+                        remaining -= num;
+                    }
+                    if (remaining > 0 && remaining < targetSum) {
+                        numbers.push(remaining);
+                    } else {
+                        return this.generateAdditionProblem();
+                    }
+                } else {
+                    // Difficult mode: Fill petals mode (current hard)
+                    targetSum = Math.floor(Math.random() * 35) + 15;
+                    const numCount = Math.floor(Math.random() * 3) + 2; // 2-4 numbers
+                    
+                    let remaining = targetSum;
+                    for (let i = 0; i < numCount - 1; i++) {
+                        const minVal = 1;
+                        const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 20);
+                        if (maxVal < minVal) {
+                            return this.generateAdditionProblem();
+                        }
+                        const num = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+                        numbers.push(num);
+                        remaining -= num;
+                    }
+                    if (remaining > 0 && remaining < targetSum) {
+                        numbers.push(remaining);
+                    } else {
+                        return this.generateAdditionProblem();
+                    }
+                }
+
+                // Verify the numbers actually add up to target
+                const sum = numbers.reduce((a, b) => a + b, 0);
+                if (sum !== targetSum) {
+                    return this.generateAdditionProblem();
+                }
+
+                return {
+                    numbers: numbers,
+                    answer: targetSum
+                };
+            }
+
+            startNewGame() {
+                this.resetStyles();
+                this.selectedNumbers = [];
+                this.wrongAttempts = 0;
+                
+                if (this.currentMode === 'addition') {
+                    this.startAdditionMode();
+                } else {
+                    this.startBeeMatchMode();
+                }
+            }
+
+            resetStyles() {
+                // Reset flower
+                const flower = document.getElementById('main-flower');
+                if (flower) {
+                    flower.classList.remove('bloomed');
+                    // Remove old petals before creating new ones
+                    const oldPetals = flower.querySelectorAll('.flower-petal');
+                    oldPetals.forEach(p => p.remove());
+                }
+
+                // Reset bee match mode elements
+                document.querySelectorAll('.operator-bee, .answer-butterfly').forEach(element => {
+                    element.classList.remove('selected', 'used');
+                });
+
+                document.querySelectorAll('.operator-slot, .answer-slot').forEach(slot => {
+                    slot.textContent = '?';
+                    slot.classList.remove('filled');
+                    slot.style.border = '';
+                    slot.style.animation = '';
+                });
+
+                // Reset flower cards
+                document.querySelectorAll('.flower-card').forEach(card => {
+                    card.classList.remove('correct', 'error');
+                });
+
+                // Reset available petals and bees
+                document.querySelectorAll('.petal, .bee').forEach(element => {
+                    element.classList.remove('selected', 'wrong');
+                    element.style.display = 'flex';
+                });
+            }
+
+            startAdditionMode() {
+                this.currentProblem = this.generateAdditionProblem();
+                
+                if (this.currentDifficulty === 'easy') {
+                    // Easy mode: Pre-filled petals, player selects the sum
+                    this.startAdditionEasyMode();
+                } else {
+                    // Medium and Difficult modes: Fill petals mode
+                    this.startAdditionFillMode();
+                }
+            }
+
+            startAdditionEasyMode() {
+                // Pre-fill petals with the numbers
+                this.createPetals(this.currentProblem.numbers.length);
+                
+                // Fill petals immediately with the correct numbers
+                const petals = document.querySelectorAll('.flower-petal');
+                this.currentProblem.numbers.forEach((num, index) => {
+                    if (petals[index]) {
+                        petals[index].textContent = num;
+                        petals[index].classList.add('filled');
+                        petals[index].dataset.value = num;
+                    }
+                });
+                
+                // Update equation display
+                document.getElementById('equation').textContent = `What do these petals add up to?`;
+                
+                // Generate answer options (correct sum + wrong answers)
+                const answerOptions = [this.currentProblem.answer];
+                
+                // Add 4 wrong answers
+                while (answerOptions.length < 5) {
+                    let wrongAnswer;
+                    if (Math.random() < 0.5) {
+                        // Sometimes make it close to the correct answer
+                        wrongAnswer = this.currentProblem.answer + Math.floor(Math.random() * 6) - 3;
+                    } else {
+                        // Other times make it random in range
+                        wrongAnswer = Math.floor(Math.random() * 20) + 1;
+                    }
+                    
+                    if (wrongAnswer > 0 && wrongAnswer <= 20 && !answerOptions.includes(wrongAnswer)) {
+                        answerOptions.push(wrongAnswer);
+                    }
+                }
+                
+                // Shuffle answer options
+                answerOptions.sort(() => Math.random() - 0.5);
+                
+                // Display answer options instead of petals
+                const container = document.getElementById('available-petals');
+                container.innerHTML = '';
+                answerOptions.forEach(sum => {
+                    const answerOption = document.createElement('div');
+                    answerOption.className = 'petal';
+                    answerOption.textContent = sum;
+                    answerOption.dataset.value = sum;
+                    answerOption.addEventListener('click', (e) => this.selectSum(e.target));
+                    container.appendChild(answerOption);
+                });
+
+                // Set center to show "?"
+                document.getElementById('flower-center').textContent = '?';
+                
+                console.log('Easy mode problem:', this.currentProblem); // Debug log
+            }
+
+            startAdditionFillMode() {
+                // Original logic for medium and difficult modes
+                
+                // Update flower center with the target sum
+                document.getElementById('flower-center').textContent = this.currentProblem.answer;
+                
+                // Dynamically create petals
+                this.createPetals(this.currentProblem.numbers.length);
+
+                // Update equation display
+                document.getElementById('equation').textContent = `Fill the petals to make ${this.currentProblem.answer}!`;
+                
+                // Generate available numbers (correct answers + some wrong ones)
+                const availableNumbers = [...this.currentProblem.numbers];
+                
+                // Add wrong answers - all smaller than target and ensure we have exactly the right count
+                while (availableNumbers.length < 8) {
+                    const wrongNum = Math.floor(Math.random() * (this.currentProblem.answer - 1)) + 1;
+                    if (!availableNumbers.includes(wrongNum)) {
+                        availableNumbers.push(wrongNum);
+                    }
+                }
+                
+                // Shuffle numbers
+                availableNumbers.sort(() => Math.random() - 0.5);
+                
+                // Display available petals
+                const container = document.getElementById('available-petals');
+                container.innerHTML = '';
+                availableNumbers.forEach(num => {
+                    const petal = document.createElement('div');
+                    petal.className = 'petal';
+                    petal.textContent = num;
+                    petal.dataset.value = num;
+                    petal.addEventListener('click', (e) => this.selectNumber(e.target));
+                    container.appendChild(petal);
+                });
+
+                console.log('Fill mode problem:', this.currentProblem); // Debug log
+            }
+
+            selectSum(sumOption) {
+                const selectedSum = parseInt(sumOption.dataset.value);
+                const correctSum = this.currentProblem.answer;
+                
+                // Update flower center with selected answer
+                document.getElementById('flower-center').textContent = selectedSum;
+                
+                if (selectedSum === correctSum) {
+                    // Correct answer!
+                    this.handleCorrectAnswer();
+                } else {
+                    // Wrong answer
+                    this.handleWrongSumAnswer(sumOption);
+                }
+            }
+
+            handleWrongSumAnswer(sumOption) {
+                this.wrongAttempts++;
+                
+                // Show error on center
+                const center = document.getElementById('flower-center');
+                center.classList.add('error');
+                center.style.border = '3px solid #FF0000';
+                center.style.animation = 'shake 0.5s ease-in-out';
+                
+                // Mark wrong answer
+                sumOption.classList.add('wrong');
+                sumOption.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    center.classList.remove('error');
+                    center.style.border = '3px solid #DAA520';
+                    center.style.animation = '';
+                    center.textContent = '?';
+                }, 1000);
+            }
+
+            selectNumber(petal) {
+                const value = parseInt(petal.dataset.value);
+                
+                // Add to selected numbers
+                this.selectedNumbers.push(value);
+                
+                // Hide the used petal
+                petal.style.display = 'none';
+                
+                // Fill the next available flower petal
+                const emptyPetals = document.querySelectorAll('.flower-petal:not(.filled)');
+                if (emptyPetals.length > 0) {
+                    const nextPetal = emptyPetals[0];
+                    nextPetal.textContent = value;
+                    nextPetal.dataset.value = value;
+                    nextPetal.classList.add('filled');
+                }
+                
+                console.log('Selected numbers:', this.selectedNumbers); // Debug log
+                console.log('Target numbers:', this.currentProblem.numbers); // Debug log
+                
+                // Check if we have enough numbers and if they sum correctly
+                const sum = this.selectedNumbers.reduce((a, b) => a + b, 0);
+                const targetSum = this.currentProblem.answer;
+                
+                if (sum === targetSum && this.selectedNumbers.length === this.currentProblem.numbers.length) {
+                    // Correct answer!
+                    this.handleCorrectAnswer();
+                } else if (sum > targetSum || this.selectedNumbers.length >= this.currentProblem.numbers.length) {
+                    // Wrong answer or too many numbers
+                    this.handleWrongAnswer();
+                }
+            }
+
+            handleCorrectAnswer() {
+                document.getElementById('main-flower').classList.add('bloomed');
+                this.correctAnswers++;
+                
+                // Create flower rain
+                this.createFlowerRain();
+                
+                // Show celebration immediately, then move to next game
+                setTimeout(() => {
+                    const celebration = document.getElementById('celebration');
+                    celebration.textContent = '🎉 Correct! 🎉';
+                    celebration.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        celebration.style.display = 'none';
+                        if (this.correctAnswers >= 3) {
+                            this.showFinalCelebration();
+                        } else {
+                            this.startNewGame();
+                        }
+                    }, 1500);
+                }, 500);
+            }
+
+            handleWrongAnswer() {
+                this.wrongAttempts++;
+                
+                const filledPetals = document.querySelectorAll('.flower-petal[data-value]');
+                filledPetals.forEach(petal => {
+                    petal.classList.add('error');
+                    petal.textContent = '?';
+                    petal.dataset.value = '';
+                    petal.classList.remove('filled');
+                    setTimeout(() => {
+                        petal.classList.remove('error');
+                    }, 1000);
+                });
+                
+                // Reset selected numbers
+                this.selectedNumbers = [];
+                
+                // Show all available petals again
+                document.querySelectorAll('.petal').forEach(petal => {
+                    petal.style.display = 'flex';
+                });
+            }
+
+            createPetals(count) {
+                const flower = document.getElementById('main-flower');
+                const center = document.getElementById('flower-center');
+                
+                // Remove any existing petals
+                const oldPetals = flower.querySelectorAll('.flower-petal');
+                oldPetals.forEach(p => p.remove());
+                
+                // Define 5 fixed petal positions to match the flower reference image  
+                // Carefully positioned to align with the natural flower petals
+                const petalPositions = [
+                    { x: -70, y: -140 },      // Top-left
+                    { x: 100, y: -100 },     // Top-right
+                    { x: 120, y: 50 },      // Bottom-right petal 
+                    { x: -120, y: 30 },     // Bottom-left petal 
+                    { x: -20, y: 140 }     // Bottom petal 
+                ];
+                
+                // Create all 5 petals but only activate the needed count
+                for (let i = 0; i < 5; i++) {
+                    const petal = document.createElement('div');
+                    petal.className = 'flower-petal';
+                    petal.textContent = '?';
+                    petal.style.left = `calc(50% + ${petalPositions[i].x}px)`;
+                    petal.style.top = `calc(50% + ${petalPositions[i].y}px)`;
+                    petal.style.transform = 'translate(-50%, -50%)';
+                    
+                    // Only show petals up to the needed count
+                    if (i >= count) {
+                        petal.classList.add('inactive');
+                    }
+                    
+                    flower.insertBefore(petal, center);
+                }
+            }
+
+            createFlowerRain() {
+                const flowerRain = document.getElementById('flower-rain');
+                const flowers = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐'];
+                
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const flower = document.createElement('div');
+                        flower.className = 'flower-emoji-rain';
+                        flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                        flower.style.left = Math.random() * 100 + 'vw';
+                        flower.style.animationDelay = Math.random() * 0.5 + 's';
+                        flowerRain.appendChild(flower);
+                        
+                        // Remove after animation
+                        setTimeout(() => {
+                            if (flower.parentNode) {
+                                flower.parentNode.removeChild(flower);
+                            }
+                        }, 2500);
+                    }, i * 100);
+                }
+            }
+
+            startBeeMatchMode() {
+                // Generate one equation at a time
+                this.currentProblem = this.generateMathEquation();
+                this.selectedOperators = [];
+                this.selectedAnswer = null;
+                
+                console.log('Generated equation:', this.currentProblem); // Debug log
+                
+                // Display the equation
+                this.displayEquation();
+                
+                // Generate and display operators
+                this.displayOperators();
+                
+                // Generate and display answers
+                this.displayAnswers();
+            }
+
+            displayEquation() {
+                const equationDisplay = document.getElementById('equation-display');
+                equationDisplay.innerHTML = '';
+                
+                const numbers = this.currentProblem.numbers;
+                const operatorCount = this.currentProblem.operators.length;
+                
+                // Create the equation display: num ? num ? num = ?
+                for (let i = 0; i < numbers.length; i++) {
+                    // Add number flower
+                    const numberFlower = document.createElement('div');
+                    numberFlower.className = 'number-flower';
+                    numberFlower.textContent = numbers[i];
+                    equationDisplay.appendChild(numberFlower);
+                    
+                    // Add operator slot (except after the last number)
+                    if (i < operatorCount) {
+                        const operatorSlot = document.createElement('div');
+                        operatorSlot.className = 'operator-slot';
+                        operatorSlot.textContent = '?';
+                        operatorSlot.dataset.index = i;
+                        equationDisplay.appendChild(operatorSlot);
+                    }
+                }
+                
+                // Add equals sign
+                const equalsSign = document.createElement('div');
+                equalsSign.textContent = '=';
+                equalsSign.style.fontSize = '1em';
+                equalsSign.style.color = '#2E8B57';
+                equationDisplay.appendChild(equalsSign);
+                
+                // Add answer slot
+                const answerSlot = document.createElement('div');
+                answerSlot.className = 'answer-slot';
+                answerSlot.textContent = '?';
+                answerSlot.id = 'answer-slot';
+                equationDisplay.appendChild(answerSlot);
+            }
+
+            displayOperators() {
+                const operatorsContainer = document.getElementById('available-operators');
+                operatorsContainer.innerHTML = '';
+                
+                let availableOperators;
+                if (this.currentDifficulty === 'easy') {
+                    availableOperators = ['+', '-'];
+                } else if (this.currentDifficulty === 'medium') {
+                    availableOperators = ['+', '-'];
+                } else {
+                    availableOperators = ['+', '-', '×', '÷'];
+                }
+                
+                availableOperators.forEach(op => {
+                    const operatorBee = document.createElement('div');
+                    operatorBee.className = 'operator-bee';
+                    operatorBee.textContent = op;
+                    operatorBee.dataset.operator = op;
+                    operatorBee.addEventListener('click', (e) => this.selectOperator(e.target));
+                    operatorsContainer.appendChild(operatorBee);
+                });
+            }
+
+            displayAnswers() {
+                const answersContainer = document.getElementById('available-answers');
+                answersContainer.innerHTML = '';
+                
+                // Generate answer options (correct answer + some wrong ones)
+                const answers = [this.currentProblem.result];
+                
+                // Add wrong answers
+                while (answers.length < 5) {
+                    let wrongAnswer;
+                    if (this.currentDifficulty === 'easy') {
+                        wrongAnswer = Math.floor(Math.random() * 20) + 1;
+                    } else if (this.currentDifficulty === 'medium') {
+                        wrongAnswer = Math.floor(Math.random() * 30) + 1;
+                    } else {
+                        wrongAnswer = Math.floor(Math.random() * 100) + 1;
+                    }
+                    
+                    if (!answers.includes(wrongAnswer)) {
+                        answers.push(wrongAnswer);
+                    }
+                }
+                
+                // Shuffle answers
+                answers.sort(() => Math.random() - 0.5);
+                
+                answers.forEach(answer => {
+                    const answerButterfly = document.createElement('div');
+                    answerButterfly.className = 'answer-butterfly';
+                    answerButterfly.textContent = answer;
+                    answerButterfly.dataset.value = answer;
+                    answerButterfly.addEventListener('click', (e) => this.selectAnswer(e.target));
+                    answersContainer.appendChild(answerButterfly);
+                });
+            }
+
+            selectOperator(operatorElement) {
+                if (operatorElement.classList.contains('used')) return;
+                
+                const operator = operatorElement.dataset.operator;
+                const operatorSlots = document.querySelectorAll('.operator-slot:not(.filled)');
+                
+                if (operatorSlots.length > 0) {
+                    // Fill the first empty operator slot
+                    const slot = operatorSlots[0];
+                    slot.textContent = operator;
+                    slot.classList.add('filled');
+                    
+                    // Mark operator as used
+                    operatorElement.classList.add('used');
+                    
+                    // Add to selected operators
+                    this.selectedOperators.push(operator);
+                    
+                    this.checkEquationComplete();
+                }
+            }
+
+            selectAnswer(answerElement) {
+                if (answerElement.classList.contains('used')) return;
+                
+                const answer = parseInt(answerElement.dataset.value);
+                const answerSlot = document.getElementById('answer-slot');
+                
+                // Clear previous answer selection
+                document.querySelectorAll('.answer-butterfly').forEach(a => a.classList.remove('selected'));
+                if (this.selectedAnswer !== null) {
+                    document.querySelectorAll('.answer-butterfly').forEach(a => a.classList.remove('used'));
+                }
+                
+                // Set new answer
+                answerSlot.textContent = answer;
+                answerSlot.classList.add('filled');
+                answerElement.classList.add('selected', 'used');
+                
+                this.selectedAnswer = answer;
+                
+                this.checkEquationComplete();
+            }
+
+            checkEquationComplete() {
+                const operatorsNeeded = this.currentProblem.operators.length;
+                const operatorsSelected = this.selectedOperators.length;
+                const answerSelected = this.selectedAnswer !== null;
+                
+                if (operatorsSelected === operatorsNeeded && answerSelected) {
+                    // Check if solution is correct
+                    setTimeout(() => {
+                        this.checkBeeMatchAnswer();
+                    }, 500);
+                }
+            }
+
+            checkBeeMatchAnswer() {
+                const correctOperators = this.currentProblem.operators;
+                const correctAnswer = this.currentProblem.result;
+                
+                // Check operators and answer
+                const operatorsCorrect = JSON.stringify(this.selectedOperators) === JSON.stringify(correctOperators);
+                const answerCorrect = this.selectedAnswer === correctAnswer;
+                
+                if (operatorsCorrect && answerCorrect) {
+                    // Correct!
+                    this.handleBeeMatchCorrect();
+                } else {
+                    // Wrong!
+                    this.handleBeeMatchWrong();
+                }
+            }
+
+            handleBeeMatchCorrect() {
+                this.correctAnswers++;
+                
+                // Create flower rain
+                this.createFlowerRain();
+                
+                // Show small celebration
+                setTimeout(() => {
+                    const celebration = document.getElementById('celebration');
+                    celebration.textContent = '🎉 Perfect! 🎉';
+                    celebration.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        celebration.style.display = 'none';
+                        if (this.correctAnswers >= 3) {
+                            this.showFinalCelebration();
+                        } else {
+                            this.startBeeMatchMode(); // Next equation
+                        }
+                    }, 1500);
+                }, 500);
+            }
+
+            handleBeeMatchWrong() {
+                // Reset the equation
+                this.selectedOperators = [];
+                this.selectedAnswer = null;
+                
+                // Clear filled slots
+                document.querySelectorAll('.operator-slot').forEach(slot => {
+                    slot.textContent = '?';
+                    slot.classList.remove('filled');
+                });
+                
+                document.getElementById('answer-slot').textContent = '?';
+                document.getElementById('answer-slot').classList.remove('filled');
+                
+                // Reset operator and answer selections
+                document.querySelectorAll('.operator-bee, .answer-butterfly').forEach(element => {
+                    element.classList.remove('used', 'selected');
+                });
+                
+                // Show error feedback
+                document.querySelectorAll('.operator-slot, #answer-slot').forEach(slot => {
+                    slot.style.border = '3px solid #FF0000';
+                    slot.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        slot.style.border = '3px dashed #8B4513';
+                        slot.style.animation = '';
+                    }, 1000);
+                });
+            }
+
+            showCelebration() {
+                const celebration = document.getElementById('celebration');
+                celebration.textContent = `🎉 Correct! 🎉`;
+                celebration.style.display = 'block';
+                setTimeout(() => {
+                    celebration.style.display = 'none';
+                    setTimeout(() => {
+                        this.startNewGame();
+                    }, 500);
+                }, 1500);
+            }
+
+            showFinalCelebration() {
+                const dialog = document.getElementById('celebration-dialog');
+                dialog.style.display = 'block';
+            }
+
+            playAgain() {
+                this.correctAnswers = 0;
+                document.getElementById('celebration-dialog').style.display = 'none';
+                this.startNewGame();
+            }
+        }
+
+        // Global function for new game button
+        function startNewGame() {
+            game.startNewGame();
+        }
+
+        // Start the game when page loads
+        let game;
+        document.addEventListener('DOMContentLoaded', () => {
+            game = new PetalPuzzles();
+        });
+    </script>
+</body>
+</html>
