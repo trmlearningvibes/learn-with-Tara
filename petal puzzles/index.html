@@ -281,6 +281,20 @@
             animation: shake 0.5s ease-in-out;
         }
 
+        .flower-petal.missing {
+            background: rgba(255, 255, 0, 0.4);
+            border: 3px dashed #FFD700;
+            color: #B8860B;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .petal-slots {
             display: none; /* Hide the old slots since petals are now part of the flower */
         }
@@ -827,7 +841,7 @@
     <div class="celebration-dialog" id="celebration-dialog">
         <h2>🏆 Amazing Work! 🏆</h2>
         <img src="celebration.png" alt="Celebration" class="celebration-image">
-        <p>You completed 3 puzzles perfectly!</p>
+        <p>You completed 5 puzzles perfectly!</p>
         <button class="play-again-btn" onclick="game.playAgain()">🎮 Play Again</button>
     </div>
 
@@ -877,7 +891,11 @@
                 } else {
                     document.getElementById('addition-mode').classList.add('hidden');
                     document.getElementById('bee-match-mode').classList.remove('hidden');
-                    document.getElementById('instructions').innerHTML = '<p><strong>Bee-quation:</strong> Tap the operator bee(s) and answer butterfly to complete the equation!</p>';
+                    if (this.currentDifficulty === 'easy') {
+                        document.getElementById('instructions').innerHTML = '<p><strong>Bee-quation - Easy:</strong> Tap the correct operator bee to complete the equation!</p>';
+                    } else {
+                        document.getElementById('instructions').innerHTML = '<p><strong>Bee-quation:</strong> Tap the operator bee(s) and answer butterfly to complete the equation!</p>';
+                    }
                 }
                 this.startNewGame();
             }
@@ -887,7 +905,7 @@
                 if (this.currentDifficulty === 'easy') {
                     instructionText = '<p><strong>Flower-sums - Easy:</strong> Look at the numbers in the petals and tap the correct sum!</p>';
                 } else if (this.currentDifficulty === 'medium') {
-                    instructionText = '<p><strong>Flower-sums - Medium:</strong> Tap numbers to fill the petals and make the target sum!</p>';
+                    instructionText = '<p><strong>Flower-sums - Medium:</strong> Find the missing number in the equation!</p>';
                 } else {
                     instructionText = '<p><strong>Flower-sums - Difficult:</strong> Tap numbers to fill the petals and make the target sum!</p>';
                 }
@@ -896,9 +914,9 @@
 
             getRandomNumber() {
                 if (this.currentDifficulty === 'easy') {
-                    return Math.floor(Math.random() * 20) + 1;
+                    return Math.floor(Math.random() * 10) + 1;
                 } else {
-                    return Math.floor(Math.random() * 100) + 1;
+                    return Math.floor(Math.random() * 50) + 1;
                 }
             }
 
@@ -937,7 +955,7 @@
                         };
                         return equation;
                     } else if (this.currentDifficulty === 'medium') {
-                        // Medium mode: + and - with numbers 1-20 (current easy)
+                        // Medium mode: + and - with numbers 1-9
                         const operations = ['+', '-'];
                         const operator = operations[Math.floor(Math.random() * operations.length)];
                         
@@ -945,12 +963,12 @@
                         
                         if (operator === '+') {
                             // Addition: ensure result is reasonable
-                            num1 = Math.floor(Math.random() * 15) + 1; // 1-15
-                            num2 = Math.floor(Math.random() * 15) + 1; // 1-15
+                            num1 = Math.floor(Math.random() * 9) + 1; // 1-9
+                            num2 = Math.floor(Math.random() * 9) + 1; // 1-9
                             result = num1 + num2;
                         } else {
                             // Subtraction: ensure positive result
-                            result = Math.floor(Math.random() * 15) + 1; // 1-15
+                            result = Math.floor(Math.random() * 9) + 1; // 1-9
                             num2 = Math.floor(Math.random() * result) + 1; // 1 to result
                             num1 = result + num2;
                         }
@@ -963,88 +981,46 @@
                         };
                         return equation;
                     } else {
-                        // Difficult mode: All operations (current hard)
-                    const operations = ['+', '-', '×', '÷'];
-                    const operator1 = operations[Math.floor(Math.random() * operations.length)];
-                    const operator2 = operations[Math.floor(Math.random() * operations.length)];
-                    
-                    let num1, num2, num3, result;
-                    
-                    // Generate numbers based on operations to ensure whole number results
-                    if (operator1 === '÷' || operator2 === '÷') {
-                        // If division is involved, work backwards from result
-                        result = Math.floor(Math.random() * 20) + 1; // 1-20
+                        // Difficult mode: All operations with 2 numbers only
+                        const operations = ['+', '-', '×', '÷'];
+                        const operator = operations[Math.floor(Math.random() * operations.length)];
                         
-                        if (operator1 === '÷' && operator2 === '÷') {
-                            // Both divisions: a ÷ b ÷ c = result
-                            num3 = Math.floor(Math.random() * 5) + 2; // 2-6
-                            num2 = Math.floor(Math.random() * 5) + 2; // 2-6
-                            num1 = result * num2 * num3;
-                        } else if (operator1 === '÷') {
-                            // First operation is division: a ÷ b op2 c = result
-                            num2 = Math.floor(Math.random() * 5) + 2; // 2-6
-                            num3 = Math.floor(Math.random() * 10) + 1; // 1-10
-                            
-                            if (operator2 === '+') {
-                                num1 = (result - num3) * num2;
-                            } else if (operator2 === '-') {
-                                num1 = (result + num3) * num2;
-                            } else if (operator2 === '×') {
-                                num1 = (result / num3) * num2;
-                            }
-                        } else {
-                            // Second operation is division: a op1 b ÷ c = result
-                            num3 = Math.floor(Math.random() * 5) + 2; // 2-6
-                            const intermediateResult = result * num3;
-                            
+                        let num1, num2, result;
+                        
+                        if (operator === '+') {
+                            num1 = Math.floor(Math.random() * 20) + 1; // 1-20
+                            num2 = Math.floor(Math.random() * 20) + 1; // 1-20
+                            result = num1 + num2;
+                        } else if (operator === '-') {
+                            // Ensure positive result
+                            result = Math.floor(Math.random() * 20) + 1; // 1-20
+                            num2 = Math.floor(Math.random() * result) + 1; // 1 to result
+                            num1 = result + num2;
+                        } else if (operator === '×') {
                             num1 = Math.floor(Math.random() * 10) + 1; // 1-10
-                            if (operator1 === '+') {
-                                num2 = intermediateResult - num1;
-                            } else if (operator1 === '-') {
-                                num2 = num1 - intermediateResult;
-                            } else if (operator1 === '×') {
-                                num2 = intermediateResult / num1;
-                            }
-                        }
-                    } else {
-                        // No division, simpler generation
-                        num1 = Math.floor(Math.random() * 20) + 1; // 1-20
-                        num2 = Math.floor(Math.random() * 20) + 1; // 1-20
-                        num3 = Math.floor(Math.random() * 20) + 1; // 1-20
-                        
-                        // Calculate result with proper order of operations
-                        let temp;
-                        if (operator1 === '×') {
-                            temp = num1 * num2;
-                        } else if (operator1 === '+') {
-                            temp = num1 + num2;
-                        } else {
-                            temp = num1 - num2;
+                            num2 = Math.floor(Math.random() * 10) + 1; // 1-10
+                            result = num1 * num2;
+                        } else if (operator === '÷') {
+                            // Division: work backwards to ensure whole numbers
+                            result = Math.floor(Math.random() * 20) + 1; // 1-20
+                            num2 = Math.floor(Math.random() * 10) + 2; // 2-11
+                            num1 = result * num2;
                         }
                         
-                        if (operator2 === '×') {
-                            result = temp * num3;
-                        } else if (operator2 === '+') {
-                            result = temp + num3;
-                        } else {
-                            result = temp - num3;
+                        // Ensure all numbers are positive integers
+                        if (num1 <= 0 || num2 <= 0 || result <= 0 || 
+                            !Number.isInteger(num1) || !Number.isInteger(num2) || !Number.isInteger(result)) {
+                            continue; // Try again with next iteration
                         }
-                    }
-                    
-                    // Ensure all numbers are positive integers
-                    if (num1 <= 0 || num2 <= 0 || num3 <= 0 || result <= 0 || 
-                        !Number.isInteger(num1) || !Number.isInteger(num2) || !Number.isInteger(num3) || !Number.isInteger(result)) {
-                        continue; // Try again with next iteration
-                    }
-                    
-                    equation = {
-                        numbers: [num1, num2, num3],
-                        operators: [operator1, operator2],
-                        result: result,
-                        display: `${num1} ? ${num2} ? ${num3} = ?`
-                    };
-                    
-                    return equation; // Successfully generated
+                        
+                        equation = {
+                            numbers: [num1, num2],
+                            operators: [operator],
+                            result: result,
+                            display: `${num1} ? ${num2} = ?`
+                        };
+                        
+                        return equation; // Successfully generated
                     }
                 }
                 
@@ -1126,7 +1102,7 @@
                         
                         for (let i = 0; i < numCount - 1; i++) {
                             const minVal = 1;
-                            const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 20);
+                            const maxVal = Math.min(remaining - (numCount - i - 1), targetSum - 1, 12);
                             if (maxVal < minVal) {
                                 validGeneration = false;
                                 break;
@@ -1214,8 +1190,11 @@
                 if (this.currentDifficulty === 'easy') {
                     // Easy mode: Pre-filled petals, player selects the sum
                     this.startAdditionEasyMode();
+                } else if (this.currentDifficulty === 'medium') {
+                    // Medium mode: One missing petal
+                    this.startAdditionMediumMode();
                 } else {
-                    // Medium and Difficult modes: Fill petals mode
+                    // Difficult mode: Fill petals mode
                     this.startAdditionFillMode();
                 }
             }
@@ -1277,6 +1256,78 @@
                 document.getElementById('flower-center').textContent = '?';
                 
                 console.log('Easy mode problem:', this.currentProblem); // Debug log
+            }
+
+            startAdditionMediumMode() {
+                // Medium mode: One missing petal
+                
+                // Create petals for all numbers
+                this.createPetals(this.currentProblem.numbers.length);
+                
+                // Choose a random position for the missing number
+                this.missingPetalIndex = Math.floor(Math.random() * this.currentProblem.numbers.length);
+                this.missingNumber = this.currentProblem.numbers[this.missingPetalIndex];
+                
+                // Fill all petals except the missing one
+                const petals = document.querySelectorAll('.flower-petal');
+                this.currentProblem.numbers.forEach((num, index) => {
+                    if (petals[index]) {
+                        if (index === this.missingPetalIndex) {
+                            // This is the missing petal - show "?" but don't add special class
+                            petals[index].textContent = '?';
+                            petals[index].dataset.missing = 'true';
+                        } else {
+                            // Fill with the correct number
+                            petals[index].textContent = num;
+                            petals[index].classList.add('filled');
+                            petals[index].dataset.value = num;
+                        }
+                    }
+                });
+                
+                // Update flower center with the target sum
+                document.getElementById('flower-center').textContent = this.currentProblem.answer;
+                
+                // Update equation display
+                document.getElementById('equation').textContent = `Find the missing number!`;
+                
+                // Generate answer options (correct missing number + wrong answers)
+                const answerOptions = [this.missingNumber];
+                
+                // Add 4 wrong answers
+                let attempts = 0;
+                while (answerOptions.length < 5 && attempts < 50) {
+                    attempts++;
+                    let wrongAnswer;
+                    if (Math.random() < 0.5) {
+                        // Sometimes make it close to the correct answer
+                        wrongAnswer = this.missingNumber + Math.floor(Math.random() * 6) - 3;
+                    } else {
+                        // Other times make it random in range (1-10 for medium)
+                        wrongAnswer = Math.floor(Math.random() * 10) + 1;
+                    }
+                    
+                    if (wrongAnswer > 0 && wrongAnswer <= 10 && !answerOptions.includes(wrongAnswer)) {
+                        answerOptions.push(wrongAnswer);
+                    }
+                }
+                
+                // Shuffle answer options
+                answerOptions.sort(() => Math.random() - 0.5);
+                
+                // Display answer options
+                const container = document.getElementById('available-petals');
+                container.innerHTML = '';
+                answerOptions.forEach(num => {
+                    const answerOption = document.createElement('div');
+                    answerOption.className = 'petal';
+                    answerOption.textContent = num;
+                    answerOption.dataset.value = num;
+                    answerOption.addEventListener('click', (e) => this.selectMissingNumber(e.target));
+                    container.appendChild(answerOption);
+                });
+                
+                console.log('Medium mode problem:', this.currentProblem, 'Missing:', this.missingNumber); // Debug log
             }
 
             startAdditionFillMode() {
@@ -1359,6 +1410,47 @@
                 }, 1000);
             }
 
+            selectMissingNumber(answerOption) {
+                const selectedNumber = parseInt(answerOption.dataset.value);
+                const correctNumber = this.missingNumber;
+                
+                // Fill the missing petal with selected answer
+                const missingPetal = document.querySelector('.flower-petal[data-missing="true"]');
+                if (missingPetal) {
+                    missingPetal.textContent = selectedNumber;
+                }
+                
+                if (selectedNumber === correctNumber) {
+                    // Correct answer!
+                    missingPetal.removeAttribute('data-missing');
+                    missingPetal.classList.add('filled');
+                    this.handleCorrectAnswer();
+                } else {
+                    // Wrong answer
+                    this.handleWrongMissingAnswer(answerOption, missingPetal);
+                }
+            }
+
+            handleWrongMissingAnswer(answerOption, missingPetal) {
+                this.wrongAttempts++;
+                
+                // Show error on missing petal
+                missingPetal.classList.add('error');
+                missingPetal.style.border = '3px solid #FF0000';
+                missingPetal.style.animation = 'shake 0.5s ease-in-out';
+                
+                // Mark wrong answer
+                answerOption.classList.add('wrong');
+                answerOption.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    missingPetal.classList.remove('error');
+                    missingPetal.style.border = '';
+                    missingPetal.style.animation = '';
+                    missingPetal.textContent = '?';
+                }, 1000);
+            }
+
             selectNumber(petal) {
                 const value = parseInt(petal.dataset.value);
                 
@@ -1408,7 +1500,7 @@
                     
                     setTimeout(() => {
                         celebration.style.display = 'none';
-                        if (this.correctAnswers >= 3) {
+                        if (this.correctAnswers >= 5) {
                             this.showFinalCelebration();
                         } else {
                             this.startNewGame();
@@ -1524,7 +1616,7 @@
                 const numbers = this.currentProblem.numbers;
                 const operatorCount = this.currentProblem.operators.length;
                 
-                // Create the equation display: num ? num ? num = ?
+                // Create the equation display: num ? num = result (Easy) or num ? num = ? (others)
                 for (let i = 0; i < numbers.length; i++) {
                     // Add number flower
                     const numberFlower = document.createElement('div');
@@ -1552,8 +1644,18 @@
                 // Add answer slot
                 const answerSlot = document.createElement('div');
                 answerSlot.className = 'answer-slot';
-                answerSlot.textContent = '?';
                 answerSlot.id = 'answer-slot';
+                
+                if (this.currentDifficulty === 'easy') {
+                    // Easy mode: Show answer immediately
+                    answerSlot.textContent = this.currentProblem.result;
+                    answerSlot.classList.add('filled');
+                    this.selectedAnswer = this.currentProblem.result;
+                } else {
+                    // Medium/Difficult: Show ? for user to select
+                    answerSlot.textContent = '?';
+                }
+                
                 equationDisplay.appendChild(answerSlot);
             }
 
@@ -1584,6 +1686,11 @@
                 const answersContainer = document.getElementById('available-answers');
                 answersContainer.innerHTML = '';
                 
+                // For Easy mode, don't show answer butterflies since answer is pre-filled
+                if (this.currentDifficulty === 'easy') {
+                    return;
+                }
+                
                 // Generate answer options (correct answer + some wrong ones)
                 const answers = [this.currentProblem.result];
                 
@@ -1592,10 +1699,8 @@
                 while (answers.length < 5 && attempts < 50) {
                     attempts++;
                     let wrongAnswer;
-                    if (this.currentDifficulty === 'easy') {
-                        wrongAnswer = Math.floor(Math.random() * 20) + 1;
-                    } else if (this.currentDifficulty === 'medium') {
-                        wrongAnswer = Math.floor(Math.random() * 30) + 1;
+                    if (this.currentDifficulty === 'medium') {
+                        wrongAnswer = Math.floor(Math.random() * 25) + 1; // Keep below 30
                     } else {
                         wrongAnswer = Math.floor(Math.random() * 100) + 1;
                     }
@@ -1667,11 +1772,20 @@
                 const operatorsSelected = this.selectedOperators.length;
                 const answerSelected = this.selectedAnswer !== null;
                 
-                if (operatorsSelected === operatorsNeeded && answerSelected) {
-                    // Check if solution is correct
-                    setTimeout(() => {
-                        this.checkBeeMatchAnswer();
-                    }, 500);
+                if (this.currentDifficulty === 'easy') {
+                    // Easy mode: Only check if operators are selected (answer is pre-filled)
+                    if (operatorsSelected === operatorsNeeded) {
+                        setTimeout(() => {
+                            this.checkBeeMatchAnswer();
+                        }, 500);
+                    }
+                } else {
+                    // Medium/Difficult: Check both operators and answer
+                    if (operatorsSelected === operatorsNeeded && answerSelected) {
+                        setTimeout(() => {
+                            this.checkBeeMatchAnswer();
+                        }, 500);
+                    }
                 }
             }
 
@@ -1706,7 +1820,7 @@
                     
                     setTimeout(() => {
                         celebration.style.display = 'none';
-                        if (this.correctAnswers >= 3) {
+                        if (this.correctAnswers >= 5) {
                             this.showFinalCelebration();
                         } else {
                             this.startBeeMatchMode(); // Next equation
@@ -1718,7 +1832,11 @@
             handleBeeMatchWrong() {
                 // Reset the equation
                 this.selectedOperators = [];
-                this.selectedAnswer = null;
+                
+                // For Easy mode, don't reset the answer since it's pre-filled
+                if (this.currentDifficulty !== 'easy') {
+                    this.selectedAnswer = null;
+                }
                 
                 // Clear filled slots
                 document.querySelectorAll('.operator-slot').forEach(slot => {
@@ -1726,8 +1844,10 @@
                     slot.classList.remove('filled');
                 });
                 
-                document.getElementById('answer-slot').textContent = '?';
-                document.getElementById('answer-slot').classList.remove('filled');
+                if (this.currentDifficulty !== 'easy') {
+                    document.getElementById('answer-slot').textContent = '?';
+                    document.getElementById('answer-slot').classList.remove('filled');
+                }
                 
                 // Reset operator and answer selections
                 document.querySelectorAll('.operator-bee, .answer-butterfly').forEach(element => {
@@ -1735,7 +1855,11 @@
                 });
                 
                 // Show error feedback
-                document.querySelectorAll('.operator-slot, #answer-slot').forEach(slot => {
+                const slotsToHighlight = this.currentDifficulty === 'easy' 
+                    ? document.querySelectorAll('.operator-slot')
+                    : document.querySelectorAll('.operator-slot, #answer-slot');
+                    
+                slotsToHighlight.forEach(slot => {
                     slot.style.border = '3px solid #FF0000';
                     slot.style.animation = 'shake 0.5s ease-in-out';
                     setTimeout(() => {
